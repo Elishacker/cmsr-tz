@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CMSR-TZ Staff Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7F0;
+    --surface:#FFFFFF;
+    --surface-alt:#F1ECDF;
+    --ink:#201D16;
+    --ink-soft:#6B6355;
+    --forest:#1F4B3C;
+    --forest-dark:#153230;
+    --ochre:#C98A2C;
+    --ochre-soft:#F3DCB0;
+    --border:#E3DCC9;
+    --danger:#B5442E;
+    --success:#5bc1ac;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:14px;}
+  ::selection{background:var(--ochre-soft);}
+  h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;margin:0;color:var(--forest-dark);}
+  .mono{font-family:'IBM Plex Mono',monospace;letter-spacing:0.02em;}
+  button{font-family:'Inter',sans-serif;cursor:pointer;border:none;}
+  input,textarea,select{font-family:'Inter',sans-serif;font-size:13.5px;}
+
+  /* ---------- LOGIN ---------- */
+  #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:
+      linear-gradient(180deg, rgba(31,75,63,0.04), rgba(31,75,63,0.04)) ,var(--bg);
+  }
+  .login-card{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:36px 32px;box-shadow:0 20px 50px -25px rgba(31,75,63,0.35);}
+  .login-brand{display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+  .login-mark{width:34px;height:34px;border-radius:8px;background:var(--forest);color:var(--ochre-soft);
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:15px;flex-shrink:0;}
+  .login-brand-text{line-height:1.15;}
+  .login-brand-text b{display:block;font-size:15px;color:var(--forest-dark);}
+  .login-brand-text span{font-size:11.5px;color:var(--ink-soft);}
+  .login-card h1{font-size:22px;margin-bottom:4px;}
+  .login-sub{color:var(--ink-soft);font-size:13px;margin-bottom:22px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:5px;
+    text-transform:uppercase;letter-spacing:0.04em;}
+  .field input, .field textarea, .field select{
+    width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--ink);
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--ochre);outline-offset:1px;border-color:var(--ochre);}
+  .field textarea{resize:vertical;min-height:70px;}
+  .btn{padding:10px 16px;border-radius:7px;font-weight:600;font-size:13.5px;transition:filter .15s;}
+  .btn:hover{filter:brightness(1.07);}
+  .btn:active{filter:brightness(0.95);}
+  .btn-primary{background:var(--forest);color:#fff;width:100%;}
+  .btn-ochre{background:var(--ochre);color:#241705;}
+  .btn-ghost{background:transparent;color:var(--forest);border:1px solid var(--border);}
+  .btn-danger-ghost{background:transparent;color:var(--danger);border:1px solid #E9CFC7;}
+  .btn-sm{padding:6px 11px;font-size:12.5px;border-radius:6px;}
+  .login-error{background:#FBEAE5;color:var(--danger);border:1px solid #F1C6BA;padding:9px 11px;border-radius:7px;font-size:12.5px;margin-bottom:14px;}
+  .login-hint{margin-top:18px;padding-top:16px;border-top:1px dashed var(--border);font-size:11.5px;color:var(--ink-soft);line-height:1.6;}
+
+  /* ---------- APP SHELL ---------- */
+  #app-screen{display:none;min-height:100vh;}
+  .shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh;}
+  .sidebar{background:var(--forest);color:#EFEAE0;padding:22px 14px;position:relative;
+    background-image:repeating-linear-gradient(180deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 27px);
+  }
+  .sidebar-brand{display:flex;align-items:center;gap:10px;padding:2px 8px 20px 8px;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:14px;}
+  .sidebar-mark{width:30px;height:30px;border-radius:7px;background:var(--ochre);color:#241705;
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:13px;flex-shrink:0;}
+  .sidebar-brand-text b{display:block;font-size:13.5px;color:#fff;}
+  .sidebar-brand-text span{font-size:10px;color:#B9C9C0;text-transform:uppercase;letter-spacing:0.06em;}
+  .nav-group-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#8FA79B;padding:10px 10px 6px;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;color:#DCE6E0;
+    font-size:13px;font-weight:500;cursor:pointer;margin-bottom:2px;border-left:3px solid transparent;}
+  .nav-item:hover{background:rgba(255,255,255,0.06);}
+  .nav-item.active{background:rgba(255,255,255,0.1);border-left:3px solid var(--ochre);color:#fff;}
+  .nav-num{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8FA79B;width:16px;flex-shrink:0;}
+  .nav-item.active .nav-num{color:var(--ochre);}
+  .sidebar-footer{position:absolute;bottom:18px;left:14px;right:14px;border-top:1px solid rgba(255,255,255,0.12);padding-top:14px;}
+  .who{font-size:12px;color:#DCE6E0;margin-bottom:8px;}
+  .who b{color:#fff;display:block;font-size:13px;}
+  .who span{color:#8FA79B;font-size:11px;text-transform:uppercase;letter-spacing:.04em;}
+  .logout-btn{width:100%;background:rgba(255,255,255,0.08);color:#EFEAE0;padding:8px;border-radius:7px;font-size:12.5px;}
+  .logout-btn:hover{background:rgba(255,255,255,0.14);}
+
+  .main{padding:28px 36px 60px;overflow-y:auto;}
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:12px;}
+  .topbar h1{font-size:26px;}
+  .topbar-sub{color:var(--ink-soft);font-size:13px;margin-top:4px;}
+  .toast{position:fixed;top:18px;right:18px;background:var(--forest-dark);color:#fff;padding:11px 16px;border-radius:8px;
+    font-size:13px;box-shadow:0 10px 30px -10px rgba(0,0,0,0.4);z-index:50;opacity:0;transform:translateY(-6px);transition:all .25s;}
+  .toast.show{opacity:1;transform:translateY(0);}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:20px;}
+  .card-title{display:flex;align-items:center;justify-content:between;gap:10px;margin-bottom:16px;}
+  .card-title h3{font-size:16px;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-grid .full{grid-column:1/-1;}
+  .form-actions{display:flex;gap:10px;margin-top:6px;}
+
+  table{width:100%;border-collapse:collapse;}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);
+    padding:8px 10px;border-bottom:2px solid var(--border);}
+  td{padding:10px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  .thumb{width:54px;height:38px;object-fit:cover;border-radius:5px;background:var(--surface-alt);display:block;border:1px solid var(--border);}
+  .row-actions{display:flex;gap:6px;white-space:nowrap;}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;background:var(--ochre-soft);color:#5A3E10;}
+  .pill.role-admin{background:var(--forest);color:#fff;}
+  .empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);}
+  .empty-state .glyph{font-size:26px;margin-bottom:8px;color:var(--ochre);}
+  .field-hint{font-size:11px;color:var(--ink-soft);margin-top:4px;}
+  .dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;}
+  .stat .num{font-family:'Fraunces',serif;font-size:26px;color:var(--forest-dark);}
+  .stat .lbl{font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+  .banner{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:20px;}
+  .banner b{color:var(--ink);}
+  @media (max-width:820px){
+    .shell{grid-template-columns:1fr;}
+    .sidebar{position:sticky;top:0;z-index:10;padding-bottom:8px;}
+    .sidebar-footer{position:static;margin-top:14px;}
+    .form-grid{grid-template-columns:1fr;}
+    .dash-grid{grid-template-columns:repeat(2,1fr);}
+  }
+
+  /* ---------- IMAGE PICKER (archive dropdown on image fields) ---------- */
+  .image-select-wrap{position:relative;}
+  .image-dropdown{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);
+    border:1px solid var(--border);border-radius:8px;max-height:230px;overflow-y:auto;z-index:30;
+    box-shadow:0 14px 34px -14px rgba(31,75,63,0.35);}
+  .image-dropdown.open{display:block;}
+  .image-dd-item{display:flex;align-items:center;gap:9px;padding:7px 10px;cursor:pointer;font-size:13px;}
+  .image-dd-item:hover{background:var(--surface-alt);}
+  .image-dd-thumb{width:38px;height:28px;object-fit:cover;border-radius:4px;background:var(--surface-alt);
+    border:1px solid var(--border);flex-shrink:0;}
+  .image-dd-empty{padding:12px;font-size:12px;color:var(--ink-soft);text-align:center;}
+  .image-preview-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
+  .image-preview{width:64px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);background:var(--surface-alt);}
+
+  /* ---------- ARCHIVE ---------- */
+  .archive-search{width:100%;max-width:360px;padding:9px 12px;border:1px solid var(--border);border-radius:7px;
+    background:var(--bg);margin-bottom:16px;}
+  .archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+  .archive-card{border:1px solid var(--border);border-radius:9px;overflow:hidden;background:var(--surface);
+    display:flex;flex-direction:column;}
+  .archive-thumb{width:100%;height:110px;object-fit:cover;background:var(--surface-alt);display:block;}
+  .archive-card-body{padding:10px 12px 2px;}
+  .archive-card-name{font-weight:600;font-size:13px;}
+  .archive-card-path{font-size:10.5px;color:var(--ink-soft);word-break:break-all;margin-top:3px;}
+  .archive-card-actions{display:flex;gap:6px;padding:10px 12px 12px;margin-top:auto;}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-mark">TZ</div>
+      <div class="login-brand-text"><b>CMSR-TZ</b><span>Staff Dashboard</span></div>
+    </div>
+    <h1>Sign in</h1>
+    <p class="login-sub">Manage the content shown on cmsr-tz.org</p>
+    <div id="login-error"></div>
+    <form id="login-form" onsubmit="return false;">
+      <div class="field">
+        <label for="login-username">Username</label>
+        <input id="login-username" type="text" autocomplete="username" placeholder="e.g. admin">
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input id="login-password" type="password" autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <button class="btn btn-primary" onclick="handleLogin()">Sign in</button>
+    </form>
+    <div class="login-hint" id="login-hint">Loading staff accounts…</div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app-screen">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-mark">TZ</div>
+        <div class="sidebar-brand-text"><b>CMSR-TZ</b><span>Content Desk</span></div>
+      </div>
+      <div class="nav-group-label">General</div>
+      <div class="nav-item" data-tab="dashboard" onclick="setTab('dashboard')"><span class="nav-num">00</span>Dashboard</div>
+      <div class="nav-group-label">Media</div>
+      <div class="nav-item" data-tab="archive" onclick="setTab('archive')"><span class="nav-num">01</span>Archive</div>
+      <div class="nav-group-label">Homepage sections</div>
+      <div class="nav-item" data-tab="slideshow" onclick="setTab('slideshow')"><span class="nav-num">02</span>Slide Show</div>
+      <div class="nav-item" data-tab="overview" onclick="setTab('overview')"><span class="nav-num">03</span>Overview</div>
+      <div class="nav-item" data-tab="programs" onclick="setTab('programs')"><span class="nav-num">04</span>Programs</div>
+      <div class="nav-item" data-tab="news" onclick="setTab('news')"><span class="nav-num">05</span>News</div>
+      <div class="nav-item" data-tab="resources" onclick="setTab('resources')"><span class="nav-num">06</span>Resources</div>
+      <div class="nav-item" data-tab="reports" onclick="setTab('reports')"><span class="nav-num">07</span>Reports</div>
+      <div class="nav-item" data-tab="updates" onclick="setTab('updates')"><span class="nav-num">08</span>Updates</div>
+      <div class="nav-group-label" id="admin-group-label">Administration</div>
+      <div class="nav-item" data-tab="users" id="nav-users" onclick="setTab('users')"><span class="nav-num">09</span>Create User</div>
+
+      <div class="sidebar-footer">
+        <div class="who"><b id="who-name">—</b><span id="who-role">—</span></div>
+        <button class="logout-btn" onclick="handleLogout()">Log out</button>
+      </div>
+    </aside>
+
+    <main class="main" id="main-content"></main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   STATE
+   ========================================================= */
+let session = null; // {username, role}
+let activeTab = 'dashboard';
+let editing = {}; // sectionKey -> id currently being edited (or null)
+let data = {
+  archive: [], slideshow: [], overview: null, programs: [], news: [],
+  resources: [], reports: [], updates: [], users: []
+};
+
+const SECTIONS = {
+  slideshow: {
+    label: 'Slide Show', storageKey: 'content:slideshow',
+    desc: 'The rotating hero carousel on the homepage.',
+    fields: [
+      {name:'image', label:'Image URL / path', type:'imageSelect', required:true, placeholder:'Search archive or paste a URL/path'},
+      {name:'eyebrow', label:'Small label above heading', type:'text', placeholder:'Education – Shule Program'},
+      {name:'heading', label:'Heading', type:'text', required:true, placeholder:'Empowering Students Through Education'},
+      {name:'description', label:'Description', type:'textarea', placeholder:'Short supporting sentence shown under the heading.'},
+      {name:'btn1Text', label:'Primary button text', type:'text', placeholder:'Learn More'},
+      {name:'btn1Link', label:'Primary button link', type:'text', placeholder:'education.html'},
+      {name:'btn2Text', label:'Secondary button text', type:'text', placeholder:'Donate Now'},
+      {name:'btn2Link', label:'Secondary button link', type:'text', placeholder:'donate.html'},
+    ],
+    titleField:'heading', subField:'eyebrow', imageField:'image',
+  },
+  programs: {
+    label: 'Programs', storageKey: 'content:programs',
+    desc: 'The four (or more) program cards under "Our Programs & Sectors".',
+    fields: [
+      {name:'image', label:'Image URL / path', type:'imageSelect', required:true, placeholder:'Search archive or paste a URL/path'},
+      {name:'category', label:'Category label', type:'text', required:true, placeholder:'Education'},
+      {name:'title', label:'Program title', type:'text', required:true, placeholder:'Shule Program'},
+      {name:'description', label:'Description', type:'textarea'},
+      {name:'link', label:'Link (page URL)', type:'text', placeholder:'education.html'},
+    ],
+    titleField:'title', subField:'category', imageField:'image',
+  },
+  news: {
+    label: 'News', storageKey: 'content:news',
+    desc: 'The "Latest News & Updates" cards shown on the homepage.',
+    fields: [
+      {name:'image', label:'Image URL / path', type:'imageSelect', required:true, placeholder:'Search archive or paste a URL/path'},
+      {name:'date', label:'Date', type:'text', required:true, placeholder:'December 31, 2025'},
+      {name:'title', label:'Headline', type:'text', required:true},
+      {name:'excerpt', label:'Excerpt', type:'textarea'},
+      {name:'link', label:'Link to full story', type:'text', placeholder:'news-detail.html'},
+    ],
+    titleField:'title', subField:'date', imageField:'image',
+  },
+  resources: {
+    label: 'Resources', storageKey: 'content:resources',
+    desc: 'Publications and reference documents listed under Resources.',
+    fields: [
+      {name:'title', label:'Title', type:'text', required:true, placeholder:'SWALA Program Brochure'},
+      {name:'category', label:'Type', type:'select', options:['Publication','Guideline','Fact Sheet','Other'], required:true},
+      {name:'fileLink', label:'File URL / path', type:'text', placeholder:'resources/swala-brochure.pdf'},
+      {name:'description', label:'Short description', type:'textarea'},
+    ],
+    titleField:'title', subField:'category', imageField:null,
+  },
+  reports: {
+    label: 'Reports', storageKey: 'content:reports',
+    desc: 'Annual reports listed under Resources → Annual Reports.',
+    fields: [
+      {name:'title', label:'Title', type:'text', required:true, placeholder:'CMSR-TZ Annual Report 2025'},
+      {name:'year', label:'Year', type:'text', required:true, placeholder:'2025'},
+      {name:'fileLink', label:'File URL / path', type:'text', placeholder:'reports/annual-report-2025.pdf'},
+      {name:'description', label:'Short description', type:'textarea'},
+    ],
+    titleField:'title', subField:'year', imageField:null,
+  },
+  updates: {
+    label: 'Updates', storageKey: 'content:updates',
+    desc: 'Short announcements — e.g. a ticker or "in brief" list, separate from full News stories.',
+    fields: [
+      {name:'date', label:'Date', type:'text', required:true},
+      {name:'title', label:'Title', type:'text', required:true},
+      {name:'body', label:'Details', type:'textarea'},
+    ],
+    titleField:'title', subField:'date', imageField:null,
+  },
+};
+
+/* =========================================================
+   STORAGE HELPERS
+   ========================================================= */
+// NOTE: this build runs as a standalone local file/server, so it uses the
+// browser's localStorage instead of Claude.ai's window.storage API. That means
+// data is saved per-browser on this machine, not shared across other computers —
+// wire this up to a real backend/database before multiple staff use it from
+// different devices.
+async function storageGet(key, shared){
+  try{
+    const raw = localStorage.getItem('cmsr:' + key);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e){ return null; }
+}
+async function storageSet(key, value, shared){
+  try{
+    localStorage.setItem('cmsr:' + key, JSON.stringify(value));
+    return true;
+  } catch(e){ console.error('storage set failed', e); return false; }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function uid(){ return Math.random().toString(36).slice(2,9); }
+function esc(s){ return (s||'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* =========================================================
+   BOOTSTRAP / LOGIN
+   ========================================================= */
+async function bootstrapUsers(){
+  let users = await storageGet('users:list', true);
+  if(!users || !Array.isArray(users) || users.length === 0){
+    users = [{ id: uid(), username:'admin', password:'cmsr-admin-2026', role:'Admin' }];
+    await storageSet('users:list', users, true);
+  }
+  data.users = users;
+  return users;
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const users = await bootstrapUsers();
+  const hint = document.getElementById('login-hint');
+  hint.innerHTML = `First time here? Use username <b class="mono">admin</b> / password <b class="mono">cmsr-admin-2026</b>, then create named accounts for each staff member and retire this one.`;
+  document.getElementById('login-password').addEventListener('keydown', e => { if(e.key === 'Enter') handleLogin(); });
+});
+
+async function handleLogin(){
+  const u = document.getElementById('login-username').value.trim();
+  const p = document.getElementById('login-password').value;
+  const errBox = document.getElementById('login-error');
+  errBox.innerHTML = '';
+  const users = await storageGet('users:list', true) || [];
+  const match = users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
+  if(!match){
+    errBox.innerHTML = `<div class="login-error">Username or password not recognized. Check with an admin if you're unsure.</div>`;
+    return;
+  }
+  session = { username: match.username, role: match.role };
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+  document.getElementById('who-name').textContent = session.username;
+  document.getElementById('who-role').textContent = session.role;
+  document.getElementById('nav-users').style.display = session.role === 'Admin' ? 'flex' : 'none';
+  document.getElementById('admin-group-label').style.display = session.role === 'Admin' ? 'block' : 'none';
+  await loadAllData();
+  setTab('dashboard');
+}
+
+function handleLogout(){
+  session = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+}
+
+async function loadAllData(){
+  data.archive = await storageGet('content:archive', true) || [];
+  for(const key of Object.keys(SECTIONS)){
+    const val = await storageGet(SECTIONS[key].storageKey, true);
+    data[key] = Array.isArray(val) ? val : [];
+  }
+  const ov = await storageGet('content:overview', true);
+  data.overview = ov || { image:'', heading:'Community Mobilisation for Reciprocal Development', paragraphs:[
+    'The Community Mobilisation for Reciprocal Development in Tanzania (CMSR-TZ) is a Non-Governmental Organization established in August 1997.',
+    'Our purpose is to complement and support the Government of Tanzania in implementing community development projects targeting rural populations.',
+  ]};
+  data.users = await storageGet('users:list', true) || data.users;
+}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+function setTab(tab){
+  activeTab = tab;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.tab === tab));
+  render();
+}
+
+/* =========================================================
+   RENDER ROOT
+   ========================================================= */
+function render(){
+  const main = document.getElementById('main-content');
+  if(activeTab === 'dashboard') return renderDashboard(main);
+  if(activeTab === 'archive') return renderArchive(main);
+  if(activeTab === 'overview') return renderOverview(main);
+  if(activeTab === 'users') return renderUsers(main);
+  return renderListSection(main, activeTab);
+}
+
+function renderDashboard(main){
+  const counts = [{label:'Archive', n: data.archive.length}, ...Object.keys(SECTIONS).map(k => ({label: SECTIONS[k].label, n: data[k].length}))];
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>Dashboard</h1><div class="topbar-sub">Welcome back, ${esc(session.username)}. Here's what's currently live on the site.</div></div>
+      <button class="btn btn-ochre" onclick="exportAll()">Export all content (JSON)</button>
+    </div>
+    <div class="banner"><b>How this works:</b> pick a section from the left, add or edit entries, and save. Changes are stored immediately and are shared with every staff account — everyone sees the same live content.</div>
+    <div class="dash-grid">
+      ${counts.map(c => `<div class="stat"><div class="num">${c.n}</div><div class="lbl">${esc(c.label)}</div></div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title"><h3>Overview section</h3></div>
+      <p style="color:var(--ink-soft);margin:0;">${data.overview && data.overview.heading ? esc(data.overview.heading) : 'Not set yet — open the Overview tab to add the About text.'}</p>
+    </div>
+  `;
+}
+
+/* =========================================================
+   GENERIC LIST SECTIONS (slideshow, programs, news, resources, reports, updates)
+   ========================================================= */
+function renderListSection(main, key){
+  const cfg = SECTIONS[key];
+  const items = data[key];
+  const editId = editing[key] || null;
+  const editItem = editId ? items.find(i => i.id === editId) : null;
+
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>${esc(cfg.label)}</h1><div class="topbar-sub">${esc(cfg.desc)}</div></div>
+      <button class="btn btn-ghost" onclick="exportSection('${key}')">Export section (JSON)</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><h3>${editItem ? 'Edit entry' : 'Add new entry'}</h3></div>
+      <div class="form-grid" id="form-${key}">
+        ${cfg.fields.map(f => renderField(key, f, editItem)).join('')}
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="saveItem('${key}')">${editItem ? 'Save changes' : 'Add to ' + esc(cfg.label)}</button>
+        ${editItem ? `<button class="btn btn-ghost" onclick="cancelEdit('${key}')">Cancel</button>` : ''}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><h3>${esc(cfg.label)} — ${items.length} ${items.length === 1 ? 'entry' : 'entries'}</h3></div>
+      ${items.length === 0 ? `
+        <div class="empty-state"><div class="glyph">＋</div>Nothing uploaded yet. Add your first entry above.</div>
+      ` : `
+        <table>
+          <thead><tr>
+            ${cfg.imageField ? '<th>Image</th>' : ''}
+            <th>${cfg.titleField.charAt(0).toUpperCase()+cfg.titleField.slice(1)}</th>
+            <th>${cfg.subField ? cfg.subField.charAt(0).toUpperCase()+cfg.subField.slice(1) : ''}</th>
+            <th></th>
+          </tr></thead>
+          <tbody>
+            ${items.map(it => `
+              <tr>
+                ${cfg.imageField ? `<td>${it[cfg.imageField] ? `<img class="thumb" src="${esc(it[cfg.imageField])}" onerror="this.style.opacity=0.25">` : '<div class="thumb"></div>'}</td>` : ''}
+                <td><b>${esc(it[cfg.titleField] || '(untitled)')}</b></td>
+                <td>${esc(it[cfg.subField] || '')}</td>
+                <td class="row-actions">
+                  <button class="btn btn-ghost btn-sm" onclick="startEdit('${key}','${it.id}')">Edit</button>
+                  <button class="btn btn-danger-ghost btn-sm" onclick="deleteItem('${key}','${it.id}')">Delete</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `}
+    </div>
+  `;
+}
+
+function renderField(key, f, editItem){
+  const val = editItem ? (editItem[f.name] || '') : '';
+  const id = `f-${key}-${f.name}`;
+  if(f.type === 'imageSelect') return renderImageSelectField(id, f, val);
+  const wrapClass = f.type === 'textarea' ? 'field full' : 'field';
+  let control = '';
+  if(f.type === 'textarea'){
+    control = `<textarea id="${id}" placeholder="${esc(f.placeholder||'')}">${esc(val)}</textarea>`;
+  } else if(f.type === 'select'){
+    control = `<select id="${id}">${(f.options||[]).map(o => `<option value="${esc(o)}" ${val===o?'selected':''}>${esc(o)}</option>`).join('')}</select>`;
+  } else {
+    control = `<input id="${id}" type="text" value="${esc(val)}" placeholder="${esc(f.placeholder||'')}">`;
+  }
+  return `<div class="${wrapClass}"><label for="${id}">${esc(f.label)}${f.required ? ' *' : ''}</label>${control}</div>`;
+}
+
+/* ---- Image picker: text input + searchable dropdown fed by the Photo Archive ---- */
+function renderImageSelectField(id, f, val){
+  return `
+    <div class="field full">
+      <label for="${id}">${esc(f.label)}${f.required ? ' *' : ''}</label>
+      <div class="image-select-wrap">
+        <input type="text" id="${id}" value="${esc(val)}" autocomplete="off"
+          placeholder="${esc(f.placeholder || 'Search archive or paste a URL/path')}"
+          oninput="onImageInput('${id}')" onfocus="onImageInput('${id}')"
+          onblur="setTimeout(()=>hideImageDropdown('${id}'),150)">
+        <div class="image-dropdown" id="dd-${id}"></div>
+      </div>
+      <div class="image-preview-row">
+        <img class="image-preview" id="preview-${id}" src="${esc(val)}" style="${val ? '' : 'display:none;'}" onerror="this.style.display='none'">
+        <span class="field-hint">Type to search the Photo Archive, or paste a direct URL/path.</span>
+      </div>
+    </div>
+  `;
+}
+function onImageInput(id){
+  const el = document.getElementById(id);
+  const dd = document.getElementById('dd-' + id);
+  if(!el || !dd) return;
+  const q = el.value.trim().toLowerCase();
+  if(data.archive.length === 0){
+    dd.innerHTML = `<div class="image-dd-empty">Photo Archive is empty — add photos from the Archive tab first.</div>`;
+  } else {
+    const matches = data.archive.filter(a => !q || a.name.toLowerCase().includes(q) || a.url.toLowerCase().includes(q)).slice(0, 30);
+    dd.innerHTML = matches.length
+      ? matches.map(a => `
+          <div class="image-dd-item" onmousedown="pickImage('${id}','${a.id}')">
+            <img class="image-dd-thumb" src="${esc(a.url)}" onerror="this.style.opacity=0.15">
+            <span>${esc(a.name)}</span>
+          </div>`).join('')
+      : `<div class="image-dd-empty">No matches for "${esc(el.value)}"</div>`;
+  }
+  dd.classList.add('open');
+  updateImagePreview(id);
+}
+function pickImage(id, archiveId){
+  const item = data.archive.find(a => a.id === archiveId);
+  if(!item) return;
+  const el = document.getElementById(id);
+  el.value = item.url;
+  hideImageDropdown(id);
+  updateImagePreview(id);
+}
+function hideImageDropdown(id){
+  const dd = document.getElementById('dd-' + id);
+  if(dd) dd.classList.remove('open');
+}
+function updateImagePreview(id){
+  const el = document.getElementById(id);
+  const prev = document.getElementById('preview-' + id);
+  if(!el || !prev) return;
+  if(el.value){ prev.src = el.value; prev.style.display = ''; }
+  else { prev.style.display = 'none'; }
+}
+
+async function saveItem(key){
+  const cfg = SECTIONS[key];
+  const record = {};
+  for(const f of cfg.fields){
+    const el = document.getElementById(`f-${key}-${f.name}`);
+    record[f.name] = el ? el.value.trim() : '';
+  }
+  const missing = cfg.fields.filter(f => f.required && !record[f.name]);
+  if(missing.length){
+    showToast(`Please fill in: ${missing.map(f=>f.label).join(', ')}`);
+    return;
+  }
+  const editId = editing[key];
+  if(editId){
+    const idx = data[key].findIndex(i => i.id === editId);
+    if(idx > -1) data[key][idx] = { ...data[key][idx], ...record };
+    editing[key] = null;
+  } else {
+    record.id = uid();
+    data[key].push(record);
+  }
+  await storageSet(cfg.storageKey, data[key], true);
+  showToast(editId ? 'Entry updated' : `Added to ${cfg.label}`);
+  render();
+}
+
+function startEdit(key, id){
+  editing[key] = id;
+  render();
+  const main = document.getElementById('main-content');
+  main.scrollTo({top:0, behavior:'smooth'});
+}
+function cancelEdit(key){
+  editing[key] = null;
+  render();
+}
+async function deleteItem(key, id){
+  const cfg = SECTIONS[key];
+  data[key] = data[key].filter(i => i.id !== id);
+  await storageSet(cfg.storageKey, data[key], true);
+  showToast('Entry deleted');
+  render();
+}
+
+/* =========================================================
+   OVERVIEW (single record, not a list)
+   ========================================================= */
+function renderOverview(main){
+  const ov = data.overview || { image:'', heading:'', paragraphs:[''] };
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>Overview</h1><div class="topbar-sub">The "About" block on the homepage — image, heading, and body paragraphs.</div></div>
+      <button class="btn btn-ghost" onclick="exportSection('overview')">Export section (JSON)</button>
+    </div>
+    <div class="card">
+      <div class="form-grid">
+        ${renderImageSelectField('ov-image', {label:'Image URL / path', placeholder:'Search archive or paste a URL/path'}, ov.image)}
+        <div class="field full">
+          <label for="ov-heading">Heading</label>
+          <input id="ov-heading" type="text" value="${esc(ov.heading)}">
+        </div>
+        <div class="field full">
+          <label for="ov-paragraphs">Body paragraphs — one per line</label>
+          <textarea id="ov-paragraphs" style="min-height:160px;">${esc((ov.paragraphs||[]).join('\n'))}</textarea>
+          <div class="field-hint">Each line becomes its own paragraph on the page.</div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="saveOverview()">Save changes</button>
+      </div>
+    </div>
+  `;
+}
+async function saveOverview(){
+  const image = document.getElementById('ov-image').value.trim();
+  const heading = document.getElementById('ov-heading').value.trim();
+  const paragraphs = document.getElementById('ov-paragraphs').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  data.overview = { image, heading, paragraphs };
+  await storageSet('content:overview', data.overview, true);
+  showToast('Overview saved');
+}
+
+/* =========================================================
+   USERS (Create User)
+   ========================================================= */
+function renderUsers(main){
+  if(session.role !== 'Admin'){
+    main.innerHTML = `<div class="topbar"><h1>Create User</h1></div><div class="banner">Only Admin accounts can manage staff logins.</div>`;
+    return;
+  }
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>Create User</h1><div class="topbar-sub">Add another staff login and control who can manage users.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><h3>New staff account</h3></div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="u-username">Username</label>
+          <input id="u-username" type="text" placeholder="e.g. mrisho">
+        </div>
+        <div class="field">
+          <label for="u-password">Temporary password</label>
+          <input id="u-password" type="text" placeholder="Give them something to change later">
+        </div>
+        <div class="field">
+          <label for="u-role">Role</label>
+          <select id="u-role">
+            <option value="Editor">Editor — can upload/edit content</option>
+            <option value="Admin">Admin — can also manage staff logins</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="createUser()">Create account</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><h3>Staff accounts — ${data.users.length}</h3></div>
+      <table>
+        <thead><tr><th>Username</th><th>Role</th><th></th></tr></thead>
+        <tbody>
+          ${data.users.map(u => `
+            <tr>
+              <td><b>${esc(u.username)}</b></td>
+              <td><span class="pill ${u.role==='Admin'?'role-admin':''}">${esc(u.role)}</span></td>
+              <td class="row-actions">
+                ${u.username === session.username ? '<span style="color:var(--ink-soft);font-size:12px;">You</span>' :
+                  `<button class="btn btn-danger-ghost btn-sm" onclick="deleteUser('${u.id}')">Remove</button>`}
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="banner"><b>Security note:</b> this prototype stores account passwords as plain text in shared storage so every logged-in user can see this dashboard's data model — that's fine for testing the workflow, but before real staff credentials go in here, this should be swapped for a real authentication backend with hashed passwords.</div>
+  `;
+}
+async function createUser(){
+  const username = document.getElementById('u-username').value.trim();
+  const password = document.getElementById('u-password').value;
+  const role = document.getElementById('u-role').value;
+  if(!username || !password){ showToast('Username and password are required'); return; }
+  if(data.users.some(u => u.username.toLowerCase() === username.toLowerCase())){
+    showToast('That username already exists'); return;
+  }
+  data.users.push({ id: uid(), username, password, role });
+  await storageSet('users:list', data.users, true);
+  showToast(`Account created for ${username}`);
+  render();
+}
+async function deleteUser(id){
+  data.users = data.users.filter(u => u.id !== id);
+  await storageSet('users:list', data.users, true);
+  showToast('Account removed');
+  render();
+}
+
+/* =========================================================
+   PHOTO ARCHIVE
+   ========================================================= */
+function renderArchive(main){
+  main.innerHTML = `
+    <div class="topbar">
+      <div><h1>Archive</h1><div class="topbar-sub">Store image and photo resources here once — then search for them from the Image URL / path field in any section.</div></div>
+      <button class="btn btn-ghost" onclick="exportSection('archive')">Export archive (JSON)</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><h3>Add a photo</h3></div>
+      <div class="form-grid">
+        <div class="field">
+          <label for="archive-name">Name (this is what staff will search for)</label>
+          <input id="archive-name" type="text" placeholder="e.g. Rulenge women entrepreneurship">
+        </div>
+        <div class="field">
+          <label for="archive-url">Image URL / path</label>
+          <input id="archive-url" type="text" placeholder="photos/rulenge/rulenge-women-entrepreneurship.jpeg">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="addArchiveItem()">Add to Archive</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><h3>Archive — ${data.archive.length} ${data.archive.length === 1 ? 'photo' : 'photos'}</h3></div>
+      <input class="archive-search" type="text" placeholder="Search photos by name…" oninput="filterArchive(this.value)">
+      <div class="archive-grid" id="archive-grid"></div>
+    </div>
+  `;
+  renderArchiveGrid('');
+}
+function renderArchiveGrid(query){
+  const grid = document.getElementById('archive-grid');
+  if(!grid) return;
+  const q = (query || '').trim().toLowerCase();
+  const items = data.archive.filter(a => !q || a.name.toLowerCase().includes(q) || a.url.toLowerCase().includes(q));
+  grid.innerHTML = items.length ? items.map(a => `
+    <div class="archive-card">
+      <img class="archive-thumb" src="${esc(a.url)}" onerror="this.style.opacity=0.2">
+      <div class="archive-card-body">
+        <div class="archive-card-name">${esc(a.name)}</div>
+        <div class="archive-card-path mono">${esc(a.url)}</div>
+      </div>
+      <div class="archive-card-actions">
+        <button class="btn btn-ghost btn-sm" onclick="copyArchivePath('${a.id}')">Copy path</button>
+        <button class="btn btn-danger-ghost btn-sm" onclick="deleteArchiveItem('${a.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('') : `<div class="empty-state"><div class="glyph">🖼</div>${q ? 'No matching photos. Try a different search.' : 'Nothing in the Archive yet. Add your first photo above.'}</div>`;
+}
+function filterArchive(q){ renderArchiveGrid(q); }
+async function addArchiveItem(){
+  const name = document.getElementById('archive-name').value.trim();
+  const url = document.getElementById('archive-url').value.trim();
+  if(!name || !url){ showToast('Please add both a name and an image URL/path'); return; }
+  data.archive.push({ id: uid(), name, url });
+  await storageSet('content:archive', data.archive, true);
+  document.getElementById('archive-name').value = '';
+  document.getElementById('archive-url').value = '';
+  showToast('Added to Archive');
+  renderArchiveGrid(document.querySelector('.archive-search') ? document.querySelector('.archive-search').value : '');
+}
+async function deleteArchiveItem(id){
+  data.archive = data.archive.filter(a => a.id !== id);
+  await storageSet('content:archive', data.archive, true);
+  showToast('Photo removed from Archive');
+  render();
+}
+function copyArchivePath(id){
+  const item = data.archive.find(a => a.id === id);
+  if(!item) return;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(item.url).then(() => showToast('Path copied')).catch(() => showToast(item.url));
+  } else {
+    showToast(item.url);
+  }
+}
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+function downloadJSON(obj, filename){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function exportSection(key){
+  downloadJSON(data[key], `cmsr-tz-${key}.json`);
+  showToast('Export started');
+}
+function exportAll(){
+  const all = { archive: data.archive };
+  Object.keys(SECTIONS).forEach(k => all[k] = data[k]);
+  all.overview = data.overview;
+  downloadJSON(all, 'cmsr-tz-all-content.json');
+  showToast('Full export started');
+}
+</script>
+</body>
+</html>
