@@ -143,6 +143,9 @@
   .image-dd-empty{padding:12px;font-size:12px;color:var(--ink-soft);text-align:center;}
   .image-preview-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
   .image-preview{width:64px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);background:var(--surface-alt);}
+  .image-input-row{display:flex;gap:8px;align-items:center;}
+  .image-input-row input[type="text"]{flex:1;}
+  .image-input-row .btn{flex-shrink:0;}
 
   /* ---------- ARCHIVE ---------- */
   .archive-search{width:100%;max-width:360px;padding:9px 12px;border:1px solid var(--border);border-radius:7px;
@@ -748,7 +751,12 @@ function renderArchive(main){
         </div>
         <div class="field">
           <label for="archive-url">Image URL / path</label>
-          <input id="archive-url" type="text" placeholder="photos/rulenge/rulenge-women-entrepreneurship.jpeg">
+          <div class="image-input-row">
+            <input id="archive-url" type="text" placeholder="photos/rulenge/rulenge-women-entrepreneurship.jpeg">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('archive-file').click()">Browse…</button>
+            <input type="file" id="archive-file" accept="image/*" style="display:none" onchange="handleArchiveFile(this)">
+          </div>
+          <div class="field-hint" id="archive-file-hint">Paste a hosted URL/path, or browse a photo from this device (embedded directly — keep it under ~1.5MB).</div>
         </div>
       </div>
       <div class="form-actions">
@@ -784,6 +792,29 @@ function renderArchiveGrid(query){
   `).join('') : `<div class="empty-state"><div class="glyph">🖼</div>${q ? 'No matching photos. Try a different search.' : 'Nothing in the Archive yet. Add your first photo above.'}</div>`;
 }
 function filterArchive(q){ renderArchiveGrid(q); }
+function handleArchiveFile(el){
+  const file = el.files && el.files[0];
+  if(!file) return;
+  const MAX_BYTES = 1.5 * 1024 * 1024; // ~1.5MB safety cap per photo
+  if(file.size > MAX_BYTES){
+    showToast('That image is too large (max ~1.5MB) — try a smaller file, or paste a hosted URL instead.');
+    el.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const urlEl = document.getElementById('archive-url');
+    if(urlEl) urlEl.value = reader.result;
+    const nameEl = document.getElementById('archive-name');
+    if(nameEl && !nameEl.value.trim()){
+      nameEl.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]+/g, ' ');
+    }
+    const hint = document.getElementById('archive-file-hint');
+    if(hint) hint.textContent = `Loaded "${file.name}" (${Math.round(file.size/1024)} KB) — will be stored as an embedded image.`;
+  };
+  reader.onerror = () => showToast('Could not read that file');
+  reader.readAsDataURL(file);
+}
 async function addArchiveItem(){
   const name = document.getElementById('archive-name').value.trim();
   const url = document.getElementById('archive-url').value.trim();
