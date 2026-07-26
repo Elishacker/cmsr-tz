@@ -675,7 +675,7 @@ strong {
 }
 
 #hero-slide .carousel-caption h1 {
-  font-size: 36px;
+  font-size: 24px;
   line-height: 1.25;
   color: var(--dark-color);
   margin-bottom: 10px;
@@ -806,9 +806,34 @@ strong {
 .counter-number,
 .counter-number-text {
   color: var(--primary-color);
-  font-size: var(--h1-font-size);
+  font-size: 32px;
   font-weight: var(--font-weight-bold);
   line-height: normal;
+}
+
+/*---------------------------------------
+  IMPACT STATS (sector-styled counters)
+-----------------------------------------*/
+.impact-stats .stat-card {
+  background: var(--white-color);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.impact-stats .stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.impact-stats .stat-icon {
+  font-size: 28px;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.impact-stats .counter-thumb {
+  margin: 0;
 }
 
 
@@ -1713,7 +1738,7 @@ blockquote::before {
   }
 
   #hero-slide .carousel-caption h1 {
-    font-size: 28px;
+    font-size: 20px;
   }
 
   #hero-slide .carousel-caption p {

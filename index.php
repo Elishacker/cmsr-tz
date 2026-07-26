@@ -1,3 +1,15 @@
+<?php
+require __DIR__ . '/config/db.php';
+
+$slides = $pdo->query('SELECT * FROM slideshow ORDER BY sort_order ASC, id ASC')->fetchAll();
+$overview = $pdo->query('SELECT * FROM overview WHERE id = 1')->fetch();
+$overviewParagraphs = ($overview && $overview['paragraphs'])
+    ? array_values(array_filter(array_map('trim', explode("\n", $overview['paragraphs']))))
+    : [];
+$programs = $pdo->query('SELECT * FROM programs ORDER BY sort_order ASC, id ASC')->fetchAll();
+$latestNews = $pdo->query('SELECT * FROM news ORDER BY id DESC LIMIT 3')->fetchAll();
+$updates = $pdo->query('SELECT * FROM updates ORDER BY id DESC LIMIT 5')->fetchAll();
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -25,7 +37,7 @@
                         <a href="mailto:info@cmsr-tz.org">info@cmsr-tz.org</a>
                     </p>
                 </div>
-                <div class="col-lg-3 col-12 ms-auto d-lg-block d-none">
+                <div class="col-Improving Maternal & Neonatal Health Care (IMaNHC) lg-3 col-12 ms-auto d-lg-block d-none">
                     <ul class="social-icon">
                         <li class="social-icon-item"><a href="#" class="social-icon-link bi-facebook"></a></li>
                         <li class="social-icon-item"><a href="#" class="social-icon-link bi-instagram"></a></li>
@@ -39,11 +51,11 @@
 
     <nav class="navbar navbar-expand-lg bg-light shadow-lg">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <img src="images/logo.png" class="logo img-fluid" alt="CMSR-TZ">
                 <span>
                     CMSR-TZ
-                    <small>Community Mobilisation for Reciprocal Development</small>
+                    <small>Community Mobilisation for Reciprocal Development in Tanzania</small>
                 </span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -52,7 +64,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link active" href="index.html">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="index.php">HOME</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="about.html" id="aboutDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">ABOUT US</a>
@@ -68,13 +80,14 @@
                         <a class="nav-link dropdown-toggle" href="what-we-do.html" id="whatWeDoDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">WHAT WE DO</a>
                         <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="whatWeDoDropdown">
-                            <li><a class="dropdown-item" href="education.html">Education &#8211; Shule Program</a></li>
-                            <li><a class="dropdown-item" href="health.html">Health</a></li>
-                            <li><a class="dropdown-item" href="women-empowerment.html">Women Empowerment &#8211; SWALA</a></li>
-                            <li><a class="dropdown-item" href="agriculture.html">Agriculture</a></li>
+                            <li><a class="dropdown-item" href="water-sanitation.html">Water and Sanitation Sector</a></li>
+                            <li><a class="dropdown-item" href="education.html">Education Sector</a></li>
+                            <li><a class="dropdown-item" href="health.html">Health Sector</a></li>
+                            <li><a class="dropdown-item" href="agriculture.html">Agriculture Sector</a></li>
+                            <li><a class="dropdown-item" href="youth-empowerment.html">Youth Empowerment Sector</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="where-we-work.html" id="whereWeWorkDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">WHERE WE WORK</a>
                         <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="whereWeWorkDropdown">
@@ -82,9 +95,9 @@
                             <li><a class="dropdown-item" href="where-we-work.html#kagera">Kagera Region</a></li>
                             <li><a class="dropdown-item" href="where-we-work.html#zanzibar">Zanzibar</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="resources.html" id="resourcesDropdown"
+                        <a class="nav-link dropdown-toggle" href="resources.php" id="resourcesDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">RESOURCES</a>
                         <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="resourcesDropdown">
                             <li><a class="dropdown-item" href="resources.html#annual-reports">Annual Reports</a></li>
@@ -92,13 +105,16 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="news.html">LATEST</a>
+                        <a class="nav-link" href="#">PROJECTS</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="news.php">LATEST</a>
+                    </li>
+                    <!-- <li class="nav-item">
                         <a class="nav-link custom-btn btn staff-btn" href="staff-login.html">
                             <i class="bi-person-lock me-1"></i>STAFF
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -107,92 +123,31 @@
     <main>
 
         <!-- HERO -->
+        <?php if ($slides): ?>
         <section class="hero-section hero-section-full-height">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-12 p-0">
                         <div id="hero-slide" class="carousel carousel-fade slide" data-bs-ride="carousel">
                             <div class="carousel-indicators">
-                                <button type="button" data-bs-target="#hero-slide" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                <button type="button" data-bs-target="#hero-slide" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                <button type="button" data-bs-target="#hero-slide" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                <button type="button" data-bs-target="#hero-slide" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                                <button type="button" data-bs-target="#hero-slide" data-bs-slide-to="4" aria-label="Slide 5"></button>
-                                <button type="button" data-bs-target="#hero-slide" data-bs-slide-to="5" aria-label="Slide 6"></button>
+                                <?php foreach ($slides as $i => $s): ?>
+                                <button type="button" data-bs-target="#hero-slide" data-bs-slide-to="<?= $i ?>" <?= $i === 0 ? 'class="active" aria-current="true"' : '' ?> aria-label="Slide <?= $i + 1 ?>"></button>
+                                <?php endforeach; ?>
                             </div>
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img src="photos/cover/cmsr-tz-overview.jpeg" class="carousel-image img-fluid w-100" style="height:600px; object-fit:cover;" alt="CMSR-TZ community overview">
+                                <?php foreach ($slides as $i => $s): ?>
+                                <div class="carousel-item<?= $i === 0 ? ' active' : '' ?>">
+                                    <img src="<?= htmlspecialchars($s['image']) ?>" class="carousel-image img-fluid w-100" style="height:600px; object-fit:cover;" alt="<?= htmlspecialchars(strip_tags($s['heading'])) ?>">
                                     <div class="carousel-caption d-flex flex-column justify-content-end">
-                                        <small>Community Development Since 1997</small>
-                                        <h1>Building Communities,<br>Changing Lives in Tanzania</h1>
-                                        <p>CMSR-TZ works across Tanzania to alleviate poverty through education, health, women empowerment, and agriculture programs in rural communities.</p>
+                                        <h1><?= $s['heading'] ?></h1>
+                                        <p><?= htmlspecialchars($s['description']) ?></p>
                                         <div class="d-flex justify-content-end gap-2">
-                                            <a href="what-we-do.html" class="custom-btn btn">Our Programs</a>
-                                            <a href="donate.html" class="donate-btn btn">Donate Now</a>
+                                            <?php if ($s['btn1_text']): ?><a href="<?= htmlspecialchars($s['btn1_link']) ?>" class="custom-btn btn"><?= htmlspecialchars($s['btn1_text']) ?></a><?php endif; ?>
+                                            <?php if ($s['btn2_text']): ?><a href="<?= htmlspecialchars($s['btn2_link']) ?>" class="donate-btn btn"><?= htmlspecialchars($s['btn2_text']) ?></a><?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="carousel-item">
-                                    <img src="photos/cover/pmhm-kondoa-overview.jpeg" class="carousel-image img-fluid w-100" style="height:600px; object-fit:cover;" alt="Shule Program education support">
-                                    <div class="carousel-caption d-flex flex-column justify-content-end">
-                                        <small>Education &#8211; Shule Program</small>
-                                        <h1>Empowering Students<br>Through Education</h1>
-                                        <p>Since 2001, our Shule Program has supported 245+ students in Dodoma Region with school fees, materials and mentorship from Italian donors.</p>
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="education.html" class="custom-btn btn">Learn More</a>
-                                            <a href="donate.html" class="donate-btn btn">Support a Student</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="photos/rulenge/rulenge-women-entrepreneurship.jpeg" class="carousel-image img-fluid w-100" style="height:600px; object-fit:cover;" alt="SWALA women empowerment">
-                                    <div class="carousel-caption d-flex flex-column justify-content-end">
-                                        <small>SWALA &#8211; Women Empowerment</small>
-                                        <h1>Empowering Women<br>in Rural Tanzania</h1>
-                                        <p>The SWALA Program builds women's economic capacity through tailoring, producing handcrafted kitenge products from Chikopelo, Dodoma Region.</p>
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="women-empowerment.html" class="custom-btn btn">Learn More</a>
-                                            <a href="donate.html" class="donate-btn btn">Support Women</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="photos/cover/rulenge-classroom-office.jpeg" class="carousel-image img-fluid w-100" style="height:600px; object-fit:cover;" alt="Health Programs">
-                                    <div class="carousel-caption d-flex flex-column justify-content-end">
-                                        <small>Health Programs</small>
-                                        <h1>Improving Health<br>for Communities</h1>
-                                        <p>Promoting Menstrual Health Management (PMHM) and Maternal & Neonatal Health Care (IMaNHC) in Dodoma and Zanzibar.</p>
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="health.html" class="custom-btn btn">Learn More</a>
-                                            <a href="donate.html" class="donate-btn btn">Support Health</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="photos/agriculture/sekondari-overview.jpeg" class="carousel-image img-fluid w-100" style="height:600px; object-fit:cover;" alt="Agriculture Sekondari ya Kilimo">
-                                    <div class="carousel-caption d-flex flex-column justify-content-end">
-                                        <small>Agriculture & Livelihoods</small>
-                                        <h1>Building Agricultural<br>Education Infrastructure</h1>
-                                        <p>Sekondari ya Kilimo project providing construction, solar energy systems, and water infrastructure for sustainable agriculture development.</p>
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="agriculture.html" class="custom-btn btn">Learn More</a>
-                                            <a href="donate.html" class="donate-btn btn">Support Agriculture</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img src="photos/rulenge/rulenge-women-entrepreneurship.jpeg" class="carousel-image img-fluid w-100" style="height:600px; object-fit:cover;" alt="Rulenge Women Entrepreneurship">
-                                    <div class="carousel-caption d-flex flex-column justify-content-end">
-                                        <small>Rulenge Project &#8211; Kagera Region</small>
-                                        <h1>Women Entrepreneurship<br>& Community Development</h1>
-                                        <p>Comprehensive women empowerment project with training, infrastructure, and enterprise development in Rulenge, Kagera Region.</p>
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="agriculture.html" class="custom-btn btn">Learn More</a>
-                                            <a href="donate.html" class="donate-btn btn">Support Projects</a>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php endforeach; ?>
                             </div>
                             <button class="carousel-control-prev" type="button" data-bs-target="#hero-slide" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -207,45 +162,76 @@
                 </div>
             </div>
         </section>
+        <?php endif; ?>
 
         <!-- STATS -->
-        <section class="section-padding">
+        <section class="section-padding impact-stats">
             <div class="container">
                 <div class="row">
+                    <div class="col-12 text-center mb-5">
+                        <small class="small-title">Our Impact</small>
+                        <h2>Reaching Communities Across Tanzania Since 1997</h2>
+                    </div>
+                </div>
+                <div class="row g-4">
 
-                    <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0 text-center">
-                        <div class="counter-thumb">
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <div class="counter-thumb stat-card p-4 rounded h-100 text-center">
+                            <span class="stat-icon-badge"><i class="bi-award-fill stat-icon"></i></span>
                             <div class="counter-number">
-                                <span class="counter" data-from="4600" data-to="4800">4800+</span><span>+</span>
+                                <span class="counter" data-from="20" data-to="29">29</span><span>+</span>
                             </div>
-                            <span class="counter-text">Secondary School Students</span>
+                            <span class="counter-text">Years of Impact</span>
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0 text-center">
-                        <div class="counter-thumb">
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <div class="counter-thumb stat-card p-4 rounded h-100 text-center">
+                            <span class="stat-icon-badge"><i class="bi-droplet-fill stat-icon"></i></span>
                             <div class="counter-number">
-                                <span class="counter" data-from="1500" data-to="1700">1700+</span><span>+</span>
+                                <span class="counter" data-from="1600" data-to="2000">2000</span><span>+</span>
                             </div>
-                            <span class="counter-text">Female Students</span>
+                            <span class="counter-text">Water &amp; Sanitation</span>
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-6 col-12 mb-4 mb-md-0 text-center">
-                        <div class="counter-thumb">
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <div class="counter-thumb stat-card p-4 rounded h-100 text-center">
+                            <span class="stat-icon-badge"><i class="bi-heart-fill stat-icon"></i></span>
                             <div class="counter-number">
-                                <span class="counter" data-from="100" data-to="200">200+</span><span>+</span>
+                                <span class="counter" data-from="8" data-to="14">14</span>
                             </div>
-                            <span class="counter-text">Family Reached</span>
+                            <span class="counter-text">Schools Reached &#8211; Health</span>
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-6 col-12 text-center">
-                        <div class="counter-thumb">
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <div class="counter-thumb stat-card p-4 rounded h-100 text-center">
+                            <span class="stat-icon-badge"><i class="bi-book-fill stat-icon"></i></span>
                             <div class="counter-number">
-                                <span class="counter" data-from="0" data-to="4">4</span>
+                                <span class="counter" data-from="180" data-to="245">245</span><span>+</span>
                             </div>
-                            <span class="counter-text">Hospital Reached</span>
+                            <span class="counter-text">Students Supported</span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <div class="counter-thumb stat-card p-4 rounded h-100 text-center">
+                            <span class="stat-icon-badge"><i class="bi-flower1 stat-icon"></i></span>
+                            <div class="counter-number">
+                                <span class="counter" data-from="0" data-to="2">2</span>
+                            </div>
+                            <span class="counter-text">Agriculture Projects</span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <div class="counter-thumb stat-card p-4 rounded h-100 text-center">
+                            <span class="stat-icon-badge"><i class="bi-shield-check stat-icon"></i></span>
+                            <div class="counter-number">
+                                <span class="counter" data-from="30" data-to="50">50</span><span>+</span>
+                            </div>
+                            <span class="counter-text">Youth Empowered</span>
                         </div>
                     </div>
 
@@ -258,14 +244,14 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6 col-12 mb-4 mb-lg-0">
-                        <img src="photos/health/imanHC/imanHC-overview.jpeg" class="about-image img-fluid" alt="CMSR-TZ team in the field" style="height:350px;object-fit:cover;width:100%;border-radius:8px;">
+                        <img src="<?= htmlspecialchars($overview['image'] ?? '') ?>" class="about-image img-fluid" alt="CMSR-TZ team in the field" style="height:350px;object-fit:cover;width:100%;border-radius:8px;">
                     </div>
                     <div class="col-lg-6 col-12">
                         <div class="custom-text-block">
-                            <h4 class="mb-3">Community Mobilisation for Reciprocal Development</h4>
-                            <p>The <strong>Community Mobilisation for Reciprocal Development in Tanzania (CMSR-TZ)</strong> is a Non-Governmental Organization established in August 1997. We are registered under Certificate No. 00NGO/R1/00411 and based in Dodoma City, Tanzania.</p>
-                            <p>Our purpose is to complement and support the Government of Tanzania in implementing community development projects targeting rural populations to alleviate extreme poverty.</p>
-                            <p>We work in partnership with local and international NGOs, Faith-Based Organizations, the Government of Tanzania, and local communities across four key sectors: <strong>Education, Health, Women Empowerment,</strong> and <strong>Agriculture</strong>.</p>
+                            <h4 class="mb-3"><?= htmlspecialchars($overview['heading'] ?? '') ?></h4>
+                            <?php foreach ($overviewParagraphs as $p): ?>
+                            <p><?= $p ?></p>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -273,7 +259,7 @@
         </section>
 
         <!-- VISION CTA -->
-        <section class="cta-section section-padding section-bg">
+        <!-- <section class="cta-section section-padding section-bg">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-8 col-12 mb-4 mb-lg-0">
@@ -285,7 +271,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <!-- PROGRAMS -->
         <section class="section-padding" id="programs">
@@ -298,46 +284,21 @@
                     </div>
                 </div>
                 <div class="row g-4">
+                    <?php foreach ($programs as $p): ?>
                     <div class="col-lg-3 col-md-6 col-12">
                         <div class="causes-thumb">
-                            <img src="photos/education/wela-lukundo-schools-1.png" class="causes-image img-fluid" alt="Education Shule Program" style="height:220px;object-fit:cover;width:100%;">
+                            <img src="<?= htmlspecialchars($p['image']) ?>" class="causes-image img-fluid" alt="<?= htmlspecialchars($p['title']) ?>" style="height:220px;object-fit:cover;width:100%;">
                             <div class="causes-info">
-                                <small>Education</small>
-                                <h4 class="causes-title"><a href="education.html">Shule Program</a></h4>
-                                <p>Supporting 245+ students in Dodoma Region since 2001 with school fees, materials, and mentorship from Italian donors.</p>
+                                <small><?= htmlspecialchars($p['category']) ?></small>
+                                <h4 class="causes-title"><a href="<?= htmlspecialchars($p['link']) ?>"><?= htmlspecialchars($p['title']) ?></a></h4>
+                                <p><?= htmlspecialchars($p['description']) ?></p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <div class="causes-thumb">
-                            <img src="photos/cover/pmhm-students-health.jpeg" class="causes-image img-fluid" alt="Health programs" style="height:220px;object-fit:cover;width:100%;">
-                            <div class="causes-info">
-                                <small>Health</small>
-                                <h4 class="causes-title"><a href="health.html">Health Programs</a></h4>
-                                <p>Promoting Menstrual Health Management (PMHM) and Maternal &amp; Neonatal Health Care (IMaNHC) in Dodoma and Zanzibar.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <div class="causes-thumb">
-                            <img src="photos/women-empowerment/swala-kitenge-products.jpeg" class="causes-image img-fluid" alt="SWALA women empowerment" style="height:220px;object-fit:cover;width:100%;">
-                            <div class="causes-info">
-                                <small>Women Empowerment</small>
-                                <h4 class="causes-title"><a href="women-empowerment.html">SWALA Program</a></h4>
-                                <p>Economically empowering women in Chikopelo Bwawani through tailoring and production of handcrafted kitenge products since 2016.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-12">
-                        <div class="causes-thumb">
-                            <img src="photos/agriculture/sekondari-overview.jpeg" class="causes-image img-fluid" alt="Agriculture Sekondari ya Kilimo" style="height:220px;object-fit:cover;width:100%;">
-                            <div class="causes-info">
-                                <small>Agriculture</small>
-                                <h4 class="causes-title"><a href="agriculture.html">Agriculture &amp; Livelihoods</a></h4>
-                                <p>Sekondari ya Kilimo and Rulenge projects providing agricultural training, water infrastructure and entrepreneurship in Kagera Region.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
+                    <?php if (!$programs): ?>
+                    <div class="col-12"><p class="text-center text-muted">Programs will appear here once added from the Staff Dashboard.</p></div>
+                    <?php endif; ?>
                 </div>
                 <div class="text-center mt-5">
                     <a href="what-we-do.html" class="custom-btn btn">View All Programs</a>
@@ -424,72 +385,65 @@
                     </div>
                 </div>
                 <div class="row g-4">
+                    <?php foreach ($latestNews as $n): ?>
                     <div class="col-lg-4 col-md-6 col-12">
                         <div class="news-block">
                             <div class="news-block-top">
-                                <a href="news-detail.html">
-                                    <img src="photos/cover/cmsr-tz-overview.jpeg" class="news-image img-fluid" alt="Annual Report 2025">
+                                <a href="news-detail.php?id=<?= (int)$n['id'] ?>">
+                                    <img src="<?= htmlspecialchars($n['image']) ?>" class="news-image img-fluid" alt="<?= htmlspecialchars($n['title']) ?>">
                                 </a>
                             </div>
                             <div class="news-block-info">
                                 <div class="news-block-date">
-                                    <p><i class="bi-calendar4 me-2"></i>December 31, 2025</p>
+                                    <p><i class="bi-calendar4 me-2"></i><?= htmlspecialchars($n['news_date']) ?></p>
                                 </div>
                                 <div class="news-block-title mb-2">
-                                    <h4><a href="news-detail.html" class="news-block-title-link">CMSR-TZ Annual Report 2025 Released</a></h4>
+                                    <h4><a href="news-detail.php?id=<?= (int)$n['id'] ?>" class="news-block-title-link"><?= htmlspecialchars($n['title']) ?></a></h4>
                                 </div>
                                 <div class="news-block-body">
-                                    <p>Our 2025 annual report covers successful implementation of the Shule Program, SWALA, PMHM, IMaNHC, and our Kagera agriculture and empowerment projects.</p>
+                                    <p><?= htmlspecialchars($n['excerpt']) ?></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="news-block">
-                            <div class="news-block-top">
-                                <a href="news-detail.html">
-                                    <img src="photos/education/education-activity-2.png" class="news-image img-fluid" alt="Shule Program school visits">
-                                </a>
-                            </div>
-                            <div class="news-block-info">
-                                <div class="news-block-date">
-                                    <p><i class="bi-calendar4 me-2"></i>August 2025</p>
-                                </div>
-                                <div class="news-block-title mb-2">
-                                    <h4><a href="news-detail.html" class="news-block-title-link">Shule Program: School Visits &amp; Student Materials Distributed</a></h4>
-                                </div>
-                                <div class="news-block-body">
-                                    <p>CMSR-TZ staff and Italian volunteers visited 7 secondary schools in Dodoma Region, distributing school materials to 245+ sponsored students.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="news-block">
-                            <div class="news-block-top">
-                                <a href="news-detail.html">
-                                    <img src="photos/health/pmhm/pmhm-storage-tank-1.jpeg" class="news-image img-fluid" alt="Kagera water well project">
-                                </a>
-                            </div>
-                            <div class="news-block-info">
-                                <div class="news-block-date">
-                                    <p><i class="bi-calendar4 me-2"></i>December 2025</p>
-                                </div>
-                                <div class="news-block-title mb-2">
-                                    <h4><a href="news-detail.html" class="news-block-title-link">Water Well &amp; Solar System Completed in Rulenge, Kagera</a></h4>
-                                </div>
-                                <div class="news-block-body">
-                                    <p>Major milestone achieved as the deep water well, pump house, and solar-powered water distribution system were completed in Ngara District, Kagera Region.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
+                    <?php if (!$latestNews): ?>
+                    <div class="col-12"><p class="text-center text-muted">No news posted yet.</p></div>
+                    <?php endif; ?>
                 </div>
                 <div class="text-center mt-5">
-                    <a href="news.html" class="custom-btn btn">View All News</a>
+                    <a href="news.php" class="custom-btn btn">View All News</a>
                 </div>
             </div>
         </section>
+
+        <!-- UPDATES -->
+        <?php if ($updates): ?>
+        <section class="section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center mb-4">
+                        <small class="small-title">In Brief</small>
+                        <h2>Latest Updates</h2>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <?php foreach ($updates as $u): ?>
+                    <div class="col-lg-6 col-12">
+                        <div class="p-3 border rounded d-flex">
+                            <div class="me-3 text-primary"><i class="bi-megaphone fs-4"></i></div>
+                            <div>
+                                <small class="text-muted d-block mb-1"><?= htmlspecialchars($u['update_date']) ?></small>
+                                <h6 class="mb-1"><?= htmlspecialchars($u['title']) ?></h6>
+                                <?php if ($u['body']): ?><p class="mb-0 small text-muted"><?= htmlspecialchars($u['body']) ?></p><?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+        <?php endif; ?>
 
         <!-- GET INVOLVED CTA -->
         <section class="cta-section section-padding">
@@ -518,7 +472,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body pb-4">
-                    <form action="news.html" method="get">
+                    <form action="news.php" method="get">
                         <div class="input-group">
                             <input type="search" name="q" class="form-control form-control-lg" placeholder="Search programs, news, reports...">
                             <button class="btn custom-btn" type="submit"><i class="bi-search"></i></button>
@@ -553,7 +507,7 @@
                 <div class="col-lg-2 col-md-4 col-6">
                     <h5 class="site-footer-title">Quick Links</h5>
                     <ul class="footer-menu">
-                        <li class="footer-menu-item"><a href="index.html" class="footer-menu-link">Home</a></li>
+                        <li class="footer-menu-item"><a href="index.php" class="footer-menu-link">Home</a></li>
                         <li class="footer-menu-item"><a href="about.html" class="footer-menu-link">About Us</a></li>
                         <li class="footer-menu-item"><a href="what-we-do.html" class="footer-menu-link">What We Do</a></li>
                         <li class="footer-menu-item"><a href="where-we-work.html" class="footer-menu-link">Where We Work</a></li>

@@ -4,148 +4,587 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CMSR-TZ Staff Dashboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap-icons.css" rel="stylesheet">
+<link href="css/templatemo-kind-heart-charity.css" rel="stylesheet">
 <style>
   :root{
-    --bg:#FAF7F0;
+    --bg:#F0F8FF;
     --surface:#FFFFFF;
-    --surface-alt:#F1ECDF;
-    --ink:#201D16;
-    --ink-soft:#6B6355;
-    --forest:#1F4B3C;
-    --forest-dark:#153230;
-    --ochre:#C98A2C;
-    --ochre-soft:#F3DCB0;
-    --border:#E3DCC9;
+    --surface-alt:#E9F4FB;
+    --ink:#000000;
+    --ink-soft:#717275;
+    --forest:#597081;
+    --forest-dark:#44525D;
+    --ochre:#5bc1ac;
+    --ochre-soft:#DFF3EF;
+    --border:#E9EAEB;
     --danger:#B5442E;
     --success:#5bc1ac;
     --radius:10px;
   }
-  *{box-sizing:border-box;}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:14px;}
-  ::selection{background:var(--ochre-soft);}
-  h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;margin:0;color:var(--forest-dark);}
-  .mono{font-family:'IBM Plex Mono',monospace;letter-spacing:0.02em;}
-  button{font-family:'Inter',sans-serif;cursor:pointer;border:none;}
-  input,textarea,select{font-family:'Inter',sans-serif;font-size:13.5px;}
+  *{
+    box-sizing:border-box;
+  }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Metropolis',sans-serif;
+    font-size:14px;
+  }
+  ::selection{
+    background:var(--ochre-soft);
+  }
+  h1,h2,h3,h4{
+    font-family:'Metropolis',sans-serif;
+    font-weight:600;
+    margin:0;
+    color:var(--forest-dark);
+    letter-spacing:-0.5px;
+  }
+  .mono{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+    letter-spacing:0.02em;
+  }
+  button{
+    font-family:'Metropolis',sans-serif;
+    cursor:pointer;
+    border:none;
+  }
+  input,textarea,select{
+    font-family:'Metropolis',sans-serif;
+    font-size:13.5px;
+}
 
   /* ---------- LOGIN ---------- */
-  #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  #login-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
     background:
-      linear-gradient(180deg, rgba(31,75,63,0.04), rgba(31,75,63,0.04)) ,var(--bg);
+    linear-gradient(180deg, rgba(89,112,129,0.05), rgba(89,112,129,0.05)) ,var(--bg);
   }
-  .login-card{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius);padding:36px 32px;box-shadow:0 20px 50px -25px rgba(31,75,63,0.35);}
-  .login-brand{display:flex;align-items:center;gap:10px;margin-bottom:22px;}
-  .login-mark{width:34px;height:34px;border-radius:8px;background:var(--forest);color:var(--ochre-soft);
-    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:15px;flex-shrink:0;}
-  .login-brand-text{line-height:1.15;}
-  .login-brand-text b{display:block;font-size:15px;color:var(--forest-dark);}
-  .login-brand-text span{font-size:11.5px;color:var(--ink-soft);}
-  .login-card h1{font-size:22px;margin-bottom:4px;}
-  .login-sub{color:var(--ink-soft);font-size:13px;margin-bottom:22px;}
-  .field{margin-bottom:14px;}
-  .field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:5px;
-    text-transform:uppercase;letter-spacing:0.04em;}
+  .login-card{
+    width:100%;
+    max-width:380px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:36px 32px;box-shadow:0 20px 50px -25px rgba(89,112,129,0.35);
+  }
+  .login-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .login-mark{
+    width:44px;
+    height:44px;
+    border-radius:8px;
+    background:var(--surface-alt);
+    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    overflow:hidden;
+  }
+  .login-mark img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    padding:5px;
+  }
+  .login-brand-text{
+    line-height:1.15;
+  }
+  .login-brand-text b{
+    display:block;
+    font-size:15px;
+    color:var(--forest-dark);
+  }
+  .login-brand-text span{
+    font-size:11.5px;
+    color:var(--ink-soft);
+  }
+  .login-card h1{
+    font-size:22px;
+    margin-bottom:4px;
+  }
+  .login-sub{
+    color:var(--ink-soft);
+    font-size:13px;
+    margin-bottom:22px;
+  }
+  .field{
+    margin-bottom:14px;
+  }
+  .field label{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin-bottom:5px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
   .field input, .field textarea, .field select{
-    width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:7px;background:var(--bg);color:var(--ink);
+    width:100%;
+    padding:9px 11px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--bg);
+    color:var(--ink);
   }
-  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--ochre);outline-offset:1px;border-color:var(--ochre);}
-  .field textarea{resize:vertical;min-height:70px;}
-  .btn{padding:10px 16px;border-radius:7px;font-weight:600;font-size:13.5px;transition:filter .15s;}
-  .btn:hover{filter:brightness(1.07);}
-  .btn:active{filter:brightness(0.95);}
-  .btn-primary{background:var(--forest);color:#fff;width:100%;}
-  .btn-ochre{background:var(--ochre);color:#241705;}
-  .btn-ghost{background:transparent;color:var(--forest);border:1px solid var(--border);}
-  .btn-danger-ghost{background:transparent;color:var(--danger);border:1px solid #E9CFC7;}
-  .btn-sm{padding:6px 11px;font-size:12.5px;border-radius:6px;}
-  .login-error{background:#FBEAE5;color:var(--danger);border:1px solid #F1C6BA;padding:9px 11px;border-radius:7px;font-size:12.5px;margin-bottom:14px;}
-  .login-hint{margin-top:18px;padding-top:16px;border-top:1px dashed var(--border);font-size:11.5px;color:var(--ink-soft);line-height:1.6;}
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus{
+    outline:2px solid var(--ochre);
+    outline-offset:1px;
+    border-color:var(--ochre);
+  }
+  .field textarea{
+    resize:vertical;
+    min-height:70px;
+  }
+  .btn{
+    padding:10px 18px;
+    border-radius:100px;
+    font-weight:600;
+    font-size:13.5px;
+    transition:filter .15s, background .15s;
+  }
+  .btn:hover{
+    filter:brightness(1.07);
+  }
+  .btn:active{
+    filter:brightness(0.95);
+  }
+  .btn-primary{
+    background:var(--forest);color:#fff;
+    width:100%;
+  }
+  .btn-primary:hover{
+    background:var(--ochre);
+    filter:none;
+  }
+  .btn-ochre{
+    background:var(--ochre);
+    color:#fff;
+  }
+  .btn-ghost{
+    background:transparent;
+    color:var(--forest);
+    border:1px solid var(--border);
+  }
+  .btn-danger-ghost{
+    background:transparent;
+    color:var(--danger);
+    border:1px solid #E9CFC7;
+  }
+  .btn-sm{
+    padding:6px 13px;
+    font-size:12.5px;
+    border-radius:100px;
+  }
+  .login-error{
+    background:#FBEAE5;
+    color:var(--danger);
+    border:1px solid #F1C6BA;
+    padding:9px 11px;
+    border-radius:7px;
+    font-size:12.5px;
+    margin-bottom:14px;
+  }
+  .login-hint{
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px dashed var(--border);
+    font-size:11.5px;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
 
   /* ---------- APP SHELL ---------- */
-  #app-screen{display:none;min-height:100vh;}
-  .shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh;}
-  .sidebar{background:var(--forest);color:#EFEAE0;padding:22px 14px;position:relative;
+  #app-screen{
+    display:none;
+    min-height:100vh;
+  }
+  .shell{
+    display:grid;
+    grid-template-columns:230px 1fr;
+    min-height:100vh;
+  }
+  .sidebar{
+    background:var(--forest-dark);
+    color:#E4E9EC;
+    padding:22px 14px;
+    display:flex;
+    flex-direction:column;
+    overflow-y:auto;
     background-image:repeating-linear-gradient(180deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 27px);
   }
-  .sidebar-brand{display:flex;align-items:center;gap:10px;padding:2px 8px 20px 8px;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:14px;}
-  .sidebar-mark{width:30px;height:30px;border-radius:7px;background:var(--ochre);color:#241705;
-    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:13px;flex-shrink:0;}
-  .sidebar-brand-text b{display:block;font-size:13.5px;color:#fff;}
-  .sidebar-brand-text span{font-size:10px;color:#B9C9C0;text-transform:uppercase;letter-spacing:0.06em;}
-  .nav-group-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.08em;color:#8FA79B;padding:10px 10px 6px;}
-  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;color:#DCE6E0;
-    font-size:13px;font-weight:500;cursor:pointer;margin-bottom:2px;border-left:3px solid transparent;}
-  .nav-item:hover{background:rgba(255,255,255,0.06);}
-  .nav-item.active{background:rgba(255,255,255,0.1);border-left:3px solid var(--ochre);color:#fff;}
-  .nav-num{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8FA79B;width:16px;flex-shrink:0;}
-  .nav-item.active .nav-num{color:var(--ochre);}
-  .sidebar-footer{position:absolute;bottom:18px;left:14px;right:14px;border-top:1px solid rgba(255,255,255,0.12);padding-top:14px;}
-  .who{font-size:12px;color:#DCE6E0;margin-bottom:8px;}
-  .who b{color:#fff;display:block;font-size:13px;}
-  .who span{color:#8FA79B;font-size:11px;text-transform:uppercase;letter-spacing:.04em;}
-  .logout-btn{width:100%;background:rgba(255,255,255,0.08);color:#EFEAE0;padding:8px;border-radius:7px;font-size:12.5px;}
-  .logout-btn:hover{background:rgba(255,255,255,0.14);}
+  .sidebar-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:2px 8px 20px 8px;
+    border-bottom:1px solid rgba(255,255,255,0.12);
+    margin-bottom:14px;
+  }
+  .sidebar-mark{
+    width:32px;
+    height:32px;
+    border-radius:7px;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    overflow:hidden;
+  }
+  .sidebar-mark img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    padding:4px;
+  }
+  .sidebar-brand-text b{
+    display:block;
+    font-size:13.5px;
+    color:#fff;
+  }
+  .sidebar-brand-text span{
+    font-size:10px;
+    color:#9FB0B8;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .nav-group-label{
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:#93A3AC;
+    padding:10px 10px 6px;
+  }
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:9px 10px;
+    border-radius:7px;
+    color:#DCE4E8;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    margin-bottom:2px;
+    border-left:3px solid transparent;
+  }
+  .nav-item:hover{
+    background:rgba(255,255,255,0.06);
+  }
+  .nav-item.active{
+    background:rgba(255,255,255,0.1);
+    border-left:3px solid var(--ochre);
+    color:#fff;
+  }
+  .nav-num{
+    font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+    font-size:10.5px;
+    color:#93A3AC;
+    width:16px;
+    flex-shrink:0;
+  }
+  .nav-item.active .nav-num{
+    color:var(--ochre);
+  }
+  .sidebar-footer{
+    margin-top:auto;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,0.12);
+  }
+  .who{
+    font-size:12px;
+    color:#DCE4E8;
+    margin-bottom:8px;
+  }
+  .who b{
+    color:#fff;
+    display:block;
+    font-size:13px;
+  }
+  .who span{
+    color:#93A3AC;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+  .logout-btn{
+    width:100%;
+    background:rgba(255,255,255,0.08);
+    color:#E4E9EC;
+    padding:8px;
+    border-radius:7px;
+    font-size:12.5px;
+  }
+  .logout-btn:hover{
+    background:rgba(255,255,255,0.14);
+  }
 
-  .main{padding:28px 36px 60px;overflow-y:auto;}
-  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:12px;}
-  .topbar h1{font-size:26px;}
-  .topbar-sub{color:var(--ink-soft);font-size:13px;margin-top:4px;}
-  .toast{position:fixed;top:18px;right:18px;background:var(--forest-dark);color:#fff;padding:11px 16px;border-radius:8px;
-    font-size:13px;box-shadow:0 10px 30px -10px rgba(0,0,0,0.4);z-index:50;opacity:0;transform:translateY(-6px);transition:all .25s;}
-  .toast.show{opacity:1;transform:translateY(0);}
+  .main{
+    padding:28px 36px 60px;
+    overflow-y:auto;
+  }
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .topbar h1{
+    font-size:26px;
+  }
+  .topbar-sub{
+    color:var(--ink-soft);
+    font-size:13px;
+    margin-top:4px;
+  }
+  .toast{
+    position:fixed;
+    top:18px;
+    right:18px;
+    background:var(--forest-dark);
+    color:#fff;
+    padding:11px 16px;
+    border-radius:8px;
+    font-size:13px;
+    box-shadow:0 10px 30px -10px rgba(0,0,0,0.4);
+    z-index:50;opacity:0;
+    transform:translateY(-6px);
+    transition:all .25s;
+  }
+  .toast.show{
+    opacity:1;
+    transform:translateY(0);
+  }
 
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:20px;}
-  .card-title{display:flex;align-items:center;justify-content:between;gap:10px;margin-bottom:16px;}
-  .card-title h3{font-size:16px;}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .form-grid .full{grid-column:1/-1;}
-  .form-actions{display:flex;gap:10px;margin-top:6px;}
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+    margin-bottom:20px;
+  }
+  .card-title{
+    display:flex;
+    align-items:center;
+    justify-content:between;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .card-title h3{
+    font-size:16px;
+  }
+  .form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  .form-grid .full{
+    grid-column:1/-1;
+  }
+  .form-actions{
+    display:flex;
+    gap:10px;
+    margin-top:6px;
+  }
 
-  table{width:100%;border-collapse:collapse;}
-  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);
-    padding:8px 10px;border-bottom:2px solid var(--border);}
-  td{padding:10px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top;}
-  tr:last-child td{border-bottom:none;}
-  .thumb{width:54px;height:38px;object-fit:cover;border-radius:5px;background:var(--surface-alt);display:block;border:1px solid var(--border);}
-  .row-actions{display:flex;gap:6px;white-space:nowrap;}
-  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;background:var(--ochre-soft);color:#5A3E10;}
-  .pill.role-admin{background:var(--forest);color:#fff;}
-  .empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);}
-  .empty-state .glyph{font-size:26px;margin-bottom:8px;color:var(--ochre);}
-  .field-hint{font-size:11px;color:var(--ink-soft);margin-top:4px;}
-  .dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
-  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;}
-  .stat .num{font-family:'Fraunces',serif;font-size:26px;color:var(--forest-dark);}
-  .stat .lbl{font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
-  .banner{background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:20px;}
-  .banner b{color:var(--ink);}
+  table{
+    width:100%;
+    border-collapse:collapse;
+  }
+  th{
+    text-align:left;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:var(--ink-soft);
+    padding:8px 10px;
+    border-bottom:2px solid var(--border);
+  }
+  td{
+    padding:10px;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+    vertical-align:top;
+  }
+  tr:last-child td{
+    border-bottom:none;
+  }
+  .thumb{
+    width:54px;
+    height:38px;
+    object-fit:cover;
+    border-radius:5px;
+    background:var(--surface-alt);
+    display:block;
+    border:1px solid var(--border);
+  }
+  .row-actions{
+    display:flex;
+    gap:6px;
+    white-space:nowrap;
+  }
+  .pill{
+    display:inline-block;
+    padding:2px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:600;
+    background:var(--ochre-soft);color:#0B4038;
+  }
+  .pill.role-admin{
+    background:var(--forest);
+    color:#fff;
+  }
+  .empty-state{
+    text-align:center;
+    padding:36px 20px;
+    color:var(--ink-soft);
+  }
+  .empty-state .glyph{
+    font-size:26px;
+    margin-bottom:8px;
+    color:var(--ochre);
+  }
+  .field-hint{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+  .dash-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;margin-bottom:22px;
+  }
+  .stat{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px 18px;
+  }
+
+  .stat .num{
+    font-family:'Metropolis',sans-serif;
+    font-weight:700;
+    font-size:26px;
+    color:var(--forest-dark);
+  }
+  .stat .lbl{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-top:2px;
+  }
+  .banner{
+    background:var(--surface-alt);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    font-size:13px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    margin-bottom:20px;
+  }
+  .banner b{
+    color:var(--ink);
+  }
   @media (max-width:820px){
     .shell{grid-template-columns:1fr;}
     .sidebar{position:sticky;top:0;z-index:10;padding-bottom:8px;}
-    .sidebar-footer{position:static;margin-top:14px;}
+    .sidebar-footer{margin-top:14px;}
     .form-grid{grid-template-columns:1fr;}
     .dash-grid{grid-template-columns:repeat(2,1fr);}
   }
 
   /* ---------- IMAGE PICKER (archive dropdown on image fields) ---------- */
   .image-select-wrap{position:relative;}
-  .image-dropdown{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--surface);
-    border:1px solid var(--border);border-radius:8px;max-height:230px;overflow-y:auto;z-index:30;
-    box-shadow:0 14px 34px -14px rgba(31,75,63,0.35);}
-  .image-dropdown.open{display:block;}
-  .image-dd-item{display:flex;align-items:center;gap:9px;padding:7px 10px;cursor:pointer;font-size:13px;}
-  .image-dd-item:hover{background:var(--surface-alt);}
-  .image-dd-thumb{width:38px;height:28px;object-fit:cover;border-radius:4px;background:var(--surface-alt);
+  .image-dropdown{
+    display:none;
+    position:absolute;
+    top:calc(100% + 4px);
+    left:0;
+    right:0;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    max-height:230px;
+    overflow-y:auto;
+    z-index:30;
+    box-shadow:0 14px 34px -14px rgba(89,112,129,0.35);
+  }
+  .image-dropdown.open{
+    display:block;
+  }
+
+  .image-dd-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:7px 10px;
+    cursor:pointer;
+    font-size:13px;
+  }
+  .image-dd-item:hover{
+    background:var(--surface-alt);
+  }
+  .image-dd-thumb{
+    width:38px;
+    height:28px;
+    object-fit:cover;
+    border-radius:4px;
+    background:var(--surface-alt);
     border:1px solid var(--border);flex-shrink:0;}
-  .image-dd-empty{padding:12px;font-size:12px;color:var(--ink-soft);text-align:center;}
-  .image-preview-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
-  .image-preview{width:64px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);background:var(--surface-alt);}
-  .image-input-row{display:flex;gap:8px;align-items:center;}
-  .image-input-row input[type="text"]{flex:1;}
-  .image-input-row .btn{flex-shrink:0;}
+  .image-dd-empty{
+    padding:12px;
+    font-size:12px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+  .image-preview-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:8px;
+  }
+  .image-preview{
+    width:64px;
+    height:44px;
+    object-fit:cover;
+    border-radius:6px;
+    border:1px solid var(--border);
+    background:var(--surface-alt);
+  }
+  .image-input-row{
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+
+  .image-input-row input[type="text"]{
+    flex:1;
+  }
+
+  .image-input-row .btn{
+    flex-shrink:0;
+  }
 
   /* ---------- ARCHIVE ---------- */
   .archive-search{width:100%;max-width:360px;padding:9px 12px;border:1px solid var(--border);border-radius:7px;
@@ -166,7 +605,7 @@
 <div id="login-screen">
   <div class="login-card">
     <div class="login-brand">
-      <div class="login-mark">TZ</div>
+      <div class="login-mark"><img src="images/logo.png" alt="CMSR-TZ"></div>
       <div class="login-brand-text"><b>CMSR-TZ</b><span>Staff Dashboard</span></div>
     </div>
     <h1>Sign in</h1>
@@ -183,7 +622,7 @@
       </div>
       <button class="btn btn-primary" onclick="handleLogin()">Sign in</button>
     </form>
-    <div class="login-hint" id="login-hint">Loading staff accounts…</div>
+    <div class="login-hint" id="login-hint">First time here? Use username <b class="mono">admin</b> / password <b class="mono">12345678</b>, then create named accounts for each staff member and retire this one.</div>
   </div>
 </div>
 
@@ -192,7 +631,7 @@
   <div class="shell">
     <aside class="sidebar">
       <div class="sidebar-brand">
-        <div class="sidebar-mark">TZ</div>
+        <div class="sidebar-mark"><img src="images/logo.png" alt="CMSR-TZ"></div>
         <div class="sidebar-brand-text"><b>CMSR-TZ</b><span>Content Desk</span></div>
       </div>
       <div class="nav-group-label">General</div>
@@ -226,9 +665,10 @@
 /* =========================================================
    STATE
    ========================================================= */
-let session = null; // {username, role}
+let session = null; // {id, username, role}
 let activeTab = 'dashboard';
 let editing = {}; // sectionKey -> id currently being edited (or null)
+let pendingArchiveFile = null;
 let data = {
   archive: [], slideshow: [], overview: null, programs: [], news: [],
   resources: [], reports: [], updates: [], users: []
@@ -236,7 +676,7 @@ let data = {
 
 const SECTIONS = {
   slideshow: {
-    label: 'Slide Show', storageKey: 'content:slideshow',
+    label: 'Slide Show',
     desc: 'The rotating hero carousel on the homepage.',
     fields: [
       {name:'image', label:'Image URL / path', type:'imageSelect', required:true, placeholder:'Search archive or paste a URL/path'},
@@ -251,7 +691,7 @@ const SECTIONS = {
     titleField:'heading', subField:'eyebrow', imageField:'image',
   },
   programs: {
-    label: 'Programs', storageKey: 'content:programs',
+    label: 'Programs',
     desc: 'The four (or more) program cards under "Our Programs & Sectors".',
     fields: [
       {name:'image', label:'Image URL / path', type:'imageSelect', required:true, placeholder:'Search archive or paste a URL/path'},
@@ -263,19 +703,19 @@ const SECTIONS = {
     titleField:'title', subField:'category', imageField:'image',
   },
   news: {
-    label: 'News', storageKey: 'content:news',
-    desc: 'The "Latest News & Updates" cards shown on the homepage.',
+    label: 'News',
+    desc: 'The "Latest News & Updates" cards shown on the homepage and news page.',
     fields: [
       {name:'image', label:'Image URL / path', type:'imageSelect', required:true, placeholder:'Search archive or paste a URL/path'},
       {name:'date', label:'Date', type:'text', required:true, placeholder:'December 31, 2025'},
       {name:'title', label:'Headline', type:'text', required:true},
-      {name:'excerpt', label:'Excerpt', type:'textarea'},
-      {name:'link', label:'Link to full story', type:'text', placeholder:'news-detail.html'},
+      {name:'excerpt', label:'Excerpt (shown on cards)', type:'textarea'},
+      {name:'body', label:'Full article (shown on the News Detail page)', type:'textarea'},
     ],
     titleField:'title', subField:'date', imageField:'image',
   },
   resources: {
-    label: 'Resources', storageKey: 'content:resources',
+    label: 'Resources',
     desc: 'Publications and reference documents listed under Resources.',
     fields: [
       {name:'title', label:'Title', type:'text', required:true, placeholder:'SWALA Program Brochure'},
@@ -286,7 +726,7 @@ const SECTIONS = {
     titleField:'title', subField:'category', imageField:null,
   },
   reports: {
-    label: 'Reports', storageKey: 'content:reports',
+    label: 'Reports',
     desc: 'Annual reports listed under Resources → Annual Reports.',
     fields: [
       {name:'title', label:'Title', type:'text', required:true, placeholder:'CMSR-TZ Annual Report 2025'},
@@ -297,7 +737,7 @@ const SECTIONS = {
     titleField:'title', subField:'year', imageField:null,
   },
   updates: {
-    label: 'Updates', storageKey: 'content:updates',
+    label: 'Updates',
     desc: 'Short announcements — e.g. a ticker or "in brief" list, separate from full News stories.',
     fields: [
       {name:'date', label:'Date', type:'text', required:true},
@@ -309,24 +749,21 @@ const SECTIONS = {
 };
 
 /* =========================================================
-   STORAGE HELPERS
+   API HELPER — talks to the PHP/MySQL backend in /api
    ========================================================= */
-// NOTE: this build runs as a standalone local file/server, so it uses the
-// browser's localStorage instead of Claude.ai's window.storage API. That means
-// data is saved per-browser on this machine, not shared across other computers —
-// wire this up to a real backend/database before multiple staff use it from
-// different devices.
-async function storageGet(key, shared){
-  try{
-    const raw = localStorage.getItem('cmsr:' + key);
-    return raw ? JSON.parse(raw) : null;
-  } catch(e){ return null; }
-}
-async function storageSet(key, value, shared){
-  try{
-    localStorage.setItem('cmsr:' + key, JSON.stringify(value));
-    return true;
-  } catch(e){ console.error('storage set failed', e); return false; }
+async function api(path, opts = {}){
+  const isForm = opts.body instanceof FormData;
+  const res = await fetch(path, {
+    method: opts.method || 'GET',
+    credentials: 'same-origin',
+    headers: (opts.body && !isForm) ? {'Content-Type':'application/json'} : undefined,
+    body: opts.body ? (isForm ? opts.body : JSON.stringify(opts.body)) : undefined,
+  });
+  let json;
+  try{ json = await res.json(); }
+  catch(e){ throw new Error('Unexpected response from server.'); }
+  if(!json.ok) throw new Error(json.error || 'Something went wrong.');
+  return json.data;
 }
 
 function showToast(msg){
@@ -336,41 +773,23 @@ function showToast(msg){
   clearTimeout(window.__toastTimer);
   window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
 }
-function uid(){ return Math.random().toString(36).slice(2,9); }
 function esc(s){ return (s||'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 /* =========================================================
    BOOTSTRAP / LOGIN
    ========================================================= */
-async function bootstrapUsers(){
-  let users = await storageGet('users:list', true);
-  if(!users || !Array.isArray(users) || users.length === 0){
-    users = [{ id: uid(), username:'admin', password:'cmsr-admin-2026', role:'Admin' }];
-    await storageSet('users:list', users, true);
-  }
-  data.users = users;
-  return users;
-}
-
 window.addEventListener('DOMContentLoaded', async () => {
-  const users = await bootstrapUsers();
-  const hint = document.getElementById('login-hint');
-  hint.innerHTML = `First time here? Use username <b class="mono">admin</b> / password <b class="mono">cmsr-admin-2026</b>, then create named accounts for each staff member and retire this one.`;
   document.getElementById('login-password').addEventListener('keydown', e => { if(e.key === 'Enter') handleLogin(); });
+  try{
+    const existing = await api('api/session.php');
+    if(existing){
+      session = existing;
+      await enterApp();
+    }
+  }catch(e){ /* backend unreachable or not logged in — stay on the login screen */ }
 });
 
-async function handleLogin(){
-  const u = document.getElementById('login-username').value.trim();
-  const p = document.getElementById('login-password').value;
-  const errBox = document.getElementById('login-error');
-  errBox.innerHTML = '';
-  const users = await storageGet('users:list', true) || [];
-  const match = users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
-  if(!match){
-    errBox.innerHTML = `<div class="login-error">Username or password not recognized. Check with an admin if you're unsure.</div>`;
-    return;
-  }
-  session = { username: match.username, role: match.role };
+async function enterApp(){
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app-screen').style.display = 'block';
   document.getElementById('who-name').textContent = session.username;
@@ -381,7 +800,25 @@ async function handleLogin(){
   setTab('dashboard');
 }
 
-function handleLogout(){
+async function handleLogin(){
+  const u = document.getElementById('login-username').value.trim();
+  const p = document.getElementById('login-password').value;
+  const errBox = document.getElementById('login-error');
+  errBox.innerHTML = '';
+  if(!u || !p){
+    errBox.innerHTML = `<div class="login-error">Enter both a username and password.</div>`;
+    return;
+  }
+  try{
+    session = await api('api/login.php', { method:'POST', body:{ username:u, password:p } });
+    await enterApp();
+  }catch(e){
+    errBox.innerHTML = `<div class="login-error">${esc(e.message)}</div>`;
+  }
+}
+
+async function handleLogout(){
+  try{ await api('api/logout.php', { method:'POST' }); }catch(e){ /* ignore */ }
   session = null;
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app-screen').style.display = 'none';
@@ -390,17 +827,14 @@ function handleLogout(){
 }
 
 async function loadAllData(){
-  data.archive = await storageGet('content:archive', true) || [];
+  data.archive = await api('api/archive.php');
   for(const key of Object.keys(SECTIONS)){
-    const val = await storageGet(SECTIONS[key].storageKey, true);
-    data[key] = Array.isArray(val) ? val : [];
+    data[key] = await api(`api/content.php?section=${key}`);
   }
-  const ov = await storageGet('content:overview', true);
-  data.overview = ov || { image:'', heading:'Community Mobilisation for Reciprocal Development', paragraphs:[
-    'The Community Mobilisation for Reciprocal Development in Tanzania (CMSR-TZ) is a Non-Governmental Organization established in August 1997.',
-    'Our purpose is to complement and support the Government of Tanzania in implementing community development projects targeting rural populations.',
-  ]};
-  data.users = await storageGet('users:list', true) || data.users;
+  data.overview = await api('api/overview.php');
+  if(session.role === 'Admin'){
+    data.users = await api('api/users.php');
+  }
 }
 
 /* =========================================================
@@ -431,7 +865,7 @@ function renderDashboard(main){
       <div><h1>Dashboard</h1><div class="topbar-sub">Welcome back, ${esc(session.username)}. Here's what's currently live on the site.</div></div>
       <button class="btn btn-ochre" onclick="exportAll()">Export all content (JSON)</button>
     </div>
-    <div class="banner"><b>How this works:</b> pick a section from the left, add or edit entries, and save. Changes are stored immediately and are shared with every staff account — everyone sees the same live content.</div>
+    <div class="banner"><b>How this works:</b> pick a section from the left, add or edit entries, and save. Changes are written straight to the cmsr_tz database and go live on cmsr-tz.org immediately — everyone sees the same content.</div>
     <div class="dash-grid">
       ${counts.map(c => `<div class="stat"><div class="num">${c.n}</div><div class="lbl">${esc(c.label)}</div></div>`).join('')}
     </div>
@@ -587,17 +1021,16 @@ async function saveItem(key){
     return;
   }
   const editId = editing[key];
-  if(editId){
-    const idx = data[key].findIndex(i => i.id === editId);
-    if(idx > -1) data[key][idx] = { ...data[key][idx], ...record };
+  if(editId) record.id = editId;
+  try{
+    await api(`api/content.php?section=${key}`, { method:'POST', body: record });
+    data[key] = await api(`api/content.php?section=${key}`);
     editing[key] = null;
-  } else {
-    record.id = uid();
-    data[key].push(record);
+    showToast(editId ? 'Entry updated' : `Added to ${cfg.label}`);
+    render();
+  }catch(e){
+    showToast(e.message);
   }
-  await storageSet(cfg.storageKey, data[key], true);
-  showToast(editId ? 'Entry updated' : `Added to ${cfg.label}`);
-  render();
 }
 
 function startEdit(key, id){
@@ -611,11 +1044,15 @@ function cancelEdit(key){
   render();
 }
 async function deleteItem(key, id){
-  const cfg = SECTIONS[key];
-  data[key] = data[key].filter(i => i.id !== id);
-  await storageSet(cfg.storageKey, data[key], true);
-  showToast('Entry deleted');
-  render();
+  if(!confirm('Delete this entry? This removes it from the live site immediately.')) return;
+  try{
+    await api(`api/content.php?section=${key}&id=${encodeURIComponent(id)}`, { method:'DELETE' });
+    data[key] = await api(`api/content.php?section=${key}`);
+    showToast('Entry deleted');
+    render();
+  }catch(e){
+    showToast(e.message);
+  }
 }
 
 /* =========================================================
@@ -651,9 +1088,12 @@ async function saveOverview(){
   const image = document.getElementById('ov-image').value.trim();
   const heading = document.getElementById('ov-heading').value.trim();
   const paragraphs = document.getElementById('ov-paragraphs').value.split('\n').map(s=>s.trim()).filter(Boolean);
-  data.overview = { image, heading, paragraphs };
-  await storageSet('content:overview', data.overview, true);
-  showToast('Overview saved');
+  try{
+    data.overview = await api('api/overview.php', { method:'POST', body:{ image, heading, paragraphs } });
+    showToast('Overview saved');
+  }catch(e){
+    showToast(e.message);
+  }
 }
 
 /* =========================================================
@@ -709,7 +1149,7 @@ function renderUsers(main){
         </tbody>
       </table>
     </div>
-    <div class="banner"><b>Security note:</b> this prototype stores account passwords as plain text in shared storage so every logged-in user can see this dashboard's data model — that's fine for testing the workflow, but before real staff credentials go in here, this should be swapped for a real authentication backend with hashed passwords.</div>
+    <div class="banner"><b>Security note:</b> passwords are hashed and stored in the cmsr_tz database — only Admin accounts can create or remove staff logins, and each account only ever sees the current username/role list, never anyone's password. Retire the default admin account once each staff member has their own login.</div>
   `;
 }
 async function createUser(){
@@ -717,19 +1157,25 @@ async function createUser(){
   const password = document.getElementById('u-password').value;
   const role = document.getElementById('u-role').value;
   if(!username || !password){ showToast('Username and password are required'); return; }
-  if(data.users.some(u => u.username.toLowerCase() === username.toLowerCase())){
-    showToast('That username already exists'); return;
+  try{
+    await api('api/users.php', { method:'POST', body:{ username, password, role } });
+    data.users = await api('api/users.php');
+    showToast(`Account created for ${username}`);
+    render();
+  }catch(e){
+    showToast(e.message);
   }
-  data.users.push({ id: uid(), username, password, role });
-  await storageSet('users:list', data.users, true);
-  showToast(`Account created for ${username}`);
-  render();
 }
 async function deleteUser(id){
-  data.users = data.users.filter(u => u.id !== id);
-  await storageSet('users:list', data.users, true);
-  showToast('Account removed');
-  render();
+  if(!confirm('Remove this staff account? They will no longer be able to sign in.')) return;
+  try{
+    await api(`api/users.php?id=${encodeURIComponent(id)}`, { method:'DELETE' });
+    data.users = await api('api/users.php');
+    showToast('Account removed');
+    render();
+  }catch(e){
+    showToast(e.message);
+  }
 }
 
 /* =========================================================
@@ -756,7 +1202,7 @@ function renderArchive(main){
             <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('archive-file').click()">Browse…</button>
             <input type="file" id="archive-file" accept="image/*" style="display:none" onchange="handleArchiveFile(this)">
           </div>
-          <div class="field-hint" id="archive-file-hint">Paste a hosted URL/path, or browse a photo from this device (embedded directly — keep it under ~1.5MB).</div>
+          <div class="field-hint" id="archive-file-hint">Paste a hosted URL/path, or browse a photo from this device (uploaded to the server, max 3MB).</div>
         </div>
       </div>
       <div class="form-actions">
@@ -794,43 +1240,61 @@ function renderArchiveGrid(query){
 function filterArchive(q){ renderArchiveGrid(q); }
 function handleArchiveFile(el){
   const file = el.files && el.files[0];
+  pendingArchiveFile = null;
   if(!file) return;
-  const MAX_BYTES = 1.5 * 1024 * 1024; // ~1.5MB safety cap per photo
+  const MAX_BYTES = 3 * 1024 * 1024; // 3MB — enforced again server-side
   if(file.size > MAX_BYTES){
-    showToast('That image is too large (max ~1.5MB) — try a smaller file, or paste a hosted URL instead.');
+    showToast('That image is too large (max 3MB) — try a smaller file, or paste a hosted URL instead.');
     el.value = '';
     return;
   }
-  const reader = new FileReader();
-  reader.onload = () => {
-    const urlEl = document.getElementById('archive-url');
-    if(urlEl) urlEl.value = reader.result;
-    const nameEl = document.getElementById('archive-name');
-    if(nameEl && !nameEl.value.trim()){
-      nameEl.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]+/g, ' ');
-    }
-    const hint = document.getElementById('archive-file-hint');
-    if(hint) hint.textContent = `Loaded "${file.name}" (${Math.round(file.size/1024)} KB) — will be stored as an embedded image.`;
-  };
-  reader.onerror = () => showToast('Could not read that file');
-  reader.readAsDataURL(file);
+  pendingArchiveFile = file;
+  const urlEl = document.getElementById('archive-url');
+  if(urlEl){ urlEl.value = ''; urlEl.placeholder = file.name; }
+  const nameEl = document.getElementById('archive-name');
+  if(nameEl && !nameEl.value.trim()){
+    nameEl.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]+/g, ' ');
+  }
+  const hint = document.getElementById('archive-file-hint');
+  if(hint) hint.textContent = `Selected "${file.name}" (${Math.round(file.size/1024)} KB) — will upload when you click Add to Archive.`;
 }
 async function addArchiveItem(){
   const name = document.getElementById('archive-name').value.trim();
   const url = document.getElementById('archive-url').value.trim();
-  if(!name || !url){ showToast('Please add both a name and an image URL/path'); return; }
-  data.archive.push({ id: uid(), name, url });
-  await storageSet('content:archive', data.archive, true);
-  document.getElementById('archive-name').value = '';
-  document.getElementById('archive-url').value = '';
-  showToast('Added to Archive');
-  renderArchiveGrid(document.querySelector('.archive-search') ? document.querySelector('.archive-search').value : '');
+  if(!name || (!url && !pendingArchiveFile)){ showToast('Please add a name, and either upload a photo or paste an image URL/path'); return; }
+  try{
+    if(pendingArchiveFile){
+      const fd = new FormData();
+      fd.append('file', pendingArchiveFile);
+      fd.append('name', name);
+      await api('api/archive.php', { method:'POST', body: fd });
+    } else {
+      await api('api/archive.php', { method:'POST', body:{ name, url } });
+    }
+    data.archive = await api('api/archive.php');
+    document.getElementById('archive-name').value = '';
+    document.getElementById('archive-url').value = '';
+    const fileEl = document.getElementById('archive-file');
+    if(fileEl) fileEl.value = '';
+    pendingArchiveFile = null;
+    const hint = document.getElementById('archive-file-hint');
+    if(hint) hint.textContent = 'Paste a hosted URL/path, or browse a photo from this device (uploaded to the server, max 3MB).';
+    showToast('Added to Archive');
+    renderArchiveGrid(document.querySelector('.archive-search') ? document.querySelector('.archive-search').value : '');
+  }catch(e){
+    showToast(e.message);
+  }
 }
 async function deleteArchiveItem(id){
-  data.archive = data.archive.filter(a => a.id !== id);
-  await storageSet('content:archive', data.archive, true);
-  showToast('Photo removed from Archive');
-  render();
+  if(!confirm('Delete this photo from the Archive? Sections already using it will show a broken image.')) return;
+  try{
+    await api(`api/archive.php?id=${encodeURIComponent(id)}`, { method:'DELETE' });
+    data.archive = await api('api/archive.php');
+    showToast('Photo removed from Archive');
+    render();
+  }catch(e){
+    showToast(e.message);
+  }
 }
 function copyArchivePath(id){
   const item = data.archive.find(a => a.id === id);

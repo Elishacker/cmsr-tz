@@ -1,3 +1,8 @@
+<?php
+require __DIR__ . '/config/db.php';
+$allNews = $pdo->query('SELECT * FROM news ORDER BY id DESC')->fetchAll();
+$recentNews = array_slice($allNews, 0, 2);
+?>
 <!doctype html>
 <html lang="en">
 
@@ -41,7 +46,7 @@
     </header>
     <nav class="navbar navbar-expand-lg bg-light shadow-lg">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
                 <img src="images/logo.png" class="logo img-fluid" alt="CMSR-TZ">
                 <span>CMSR-TZ<small>Community Mobilisation for Reciprocal Development</small></span>
             </a>
@@ -50,7 +55,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="index.html">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php">HOME</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="about.html" role="button" data-bs-toggle="dropdown">ABOUT US</a>
                         <ul class="dropdown-menu dropdown-menu-light">
@@ -79,13 +84,13 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="resources.html" role="button" data-bs-toggle="dropdown">RESOURCES</a>
+                        <a class="nav-link dropdown-toggle" href="resources.php" role="button" data-bs-toggle="dropdown">RESOURCES</a>
                         <ul class="dropdown-menu dropdown-menu-light">
                             <li><a class="dropdown-item" href="resources.html#annual-reports">Annual Reports</a></li>
                             <li><a class="dropdown-item" href="resources.html#publications">Publications</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link active" href="news.html">LATEST</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="news.php">LATEST</a></li>
                     <li class="nav-item"><a class="nav-link custom-btn btn staff-btn" href="staff-login.html"><i class="bi-person-lock me-1"></i>STAFF</a></li>
                 </ul>
             </div>
@@ -113,78 +118,13 @@
                 <div class="row">
 
                     <div class="col-lg-7 col-12">
-                        <div class="news-block">
-                            <div class="news-block-top">
-                                <a href="news-detail.html">
-                                    <img src="images/news/medium-shot-volunteers-with-clothing-donations.jpg"
-                                        class="news-image img-fluid" alt="">
-                                </a>
-
-                                <div class="news-category-block">
-                                    <a href="#" class="category-block-link">
-                                        Lifestyle,
-                                    </a>
-
-                                    <a href="#" class="category-block-link">
-                                        Clothing Donation
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="news-block-info">
-                                <div class="d-flex mt-2">
-                                    <div class="news-block-date">
-                                        <p>
-                                            <i class="bi-calendar4 custom-icon me-1"></i>
-                                            December 31, 2025
-                                        </p>
-                                    </div>
-
-                                    <div class="news-block-author mx-5">
-                                        <p>
-                                            <i class="bi-person custom-icon me-1"></i>
-                                            By Admin
-                                        </p>
-                                    </div>
-
-                                    <div class="news-block-comment">
-                                        <p>
-                                            <i class="bi-chat-left custom-icon me-1"></i>
-                                            32 Comments
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="news-block-title mb-2">
-                                    <h4><a href="news-detail.html" class="news-block-title-link">CMSR-TZ Annual Report 2025 Released</a></h4>
-                                </div>
-
-                                <div class="news-block-body">
-                                    <p>Our 2025 annual report covers all program activities: Shule Program, SWALA, PMHM, IMaNHC, Rulenge project, and Sekondari ya Kilimo. 245+ students supported, water well completed in Kagera, and much more.</p>
-                                </div>
-                            </div>
-                        </div>
-
+                        <?php foreach ($allNews as $n): ?>
                         <div class="news-block mt-3">
                             <div class="news-block-top">
-                                <a href="news-detail.html">
-                                    <img src="images/news/medium-shot-people-collecting-foodstuff.jpg"
-                                        class="news-image img-fluid" alt="">
+                                <a href="news-detail.php?id=<?= (int)$n['id'] ?>">
+                                    <img src="<?= htmlspecialchars($n['image']) ?>"
+                                        class="news-image img-fluid" alt="<?= htmlspecialchars($n['title']) ?>">
                                 </a>
-
-                                <div class="news-category-block">
-                                    <a href="#" class="category-block-link">
-                                        Food,
-                                    </a>
-
-                                    <a href="#" class="category-block-link">
-                                        Donation,
-                                    </a>
-
-                                    <a href="#" class="category-block-link">
-                                        Caring
-                                    </a>
-                                </div>
                             </div>
 
                             <div class="news-block-info">
@@ -192,34 +132,24 @@
                                     <div class="news-block-date">
                                         <p>
                                             <i class="bi-calendar4 custom-icon me-1"></i>
-                                            August 2025
-                                        </p>
-                                    </div>
-
-                                    <div class="news-block-author mx-5">
-                                        <p>
-                                            <i class="bi-person custom-icon me-1"></i>
-                                            By Admin
-                                        </p>
-                                    </div>
-
-                                    <div class="news-block-comment">
-                                        <p>
-                                            <i class="bi-chat-left custom-icon me-1"></i>
-                                            35 Comments
+                                            <?= htmlspecialchars($n['news_date']) ?>
                                         </p>
                                     </div>
                                 </div>
 
                                 <div class="news-block-title mb-2">
-                                    <h4><a href="news-detail.html" class="news-block-title-link">Shule Program: School Visits &amp; Student Materials 2025</a></h4>
+                                    <h4><a href="news-detail.php?id=<?= (int)$n['id'] ?>" class="news-block-title-link"><?= htmlspecialchars($n['title']) ?></a></h4>
                                 </div>
 
                                 <div class="news-block-body">
-                                    <p>CMSR-TZ staff and Italian volunteers visited 7 secondary schools in Dodoma Region in August 2025, distributing materials to 245+ sponsored students and monitoring academic progress.</p>
+                                    <p><?= htmlspecialchars($n['excerpt']) ?></p>
                                 </div>
                             </div>
                         </div>
+                        <?php endforeach; ?>
+                        <?php if (!$allNews): ?>
+                        <p class="text-muted">No news posted yet — check back soon.</p>
+                        <?php endif; ?>
                     </div>
 
                     <div class="col-lg-4 col-12 mx-auto mt-4 mt-lg-0">
@@ -233,51 +163,30 @@
 
                         <h5 class="mt-5 mb-3">Recent news</h5>
 
+                        <?php foreach ($recentNews as $n): ?>
                         <div class="news-block news-block-two-col d-flex mt-4">
                             <div class="news-block-two-col-image-wrap">
-                                <a href="news-detail.html">
-                                    <img src="images/news/africa-humanitarian-aid-doctor.jpg"
-                                        class="news-image img-fluid" alt="">
+                                <a href="news-detail.php?id=<?= (int)$n['id'] ?>">
+                                    <img src="<?= htmlspecialchars($n['image']) ?>"
+                                        class="news-image img-fluid" alt="<?= htmlspecialchars($n['title']) ?>">
                                 </a>
                             </div>
 
                             <div class="news-block-two-col-info">
                                 <div class="news-block-title mb-2">
-                                    <h6><a href="news-detail.html" class="news-block-title-link">Food donation area</a>
+                                    <h6><a href="news-detail.php?id=<?= (int)$n['id'] ?>" class="news-block-title-link"><?= htmlspecialchars($n['title']) ?></a>
                                     </h6>
                                 </div>
 
                                 <div class="news-block-date">
                                     <p>
                                         <i class="bi-calendar4 custom-icon me-1"></i>
-                                        October 16, 2036
+                                        <?= htmlspecialchars($n['news_date']) ?>
                                     </p>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="news-block news-block-two-col d-flex mt-4">
-                            <div class="news-block-two-col-image-wrap">
-                                <a href="news-detail.html">
-                                    <img src="images/news/close-up-happy-people-working-together.jpg"
-                                        class="news-image img-fluid" alt="">
-                                </a>
-                            </div>
-
-                            <div class="news-block-two-col-info">
-                                <div class="news-block-title mb-2">
-                                    <h6><a href="news-detail.html" class="news-block-title-link">Volunteering Clean</a>
-                                    </h6>
-                                </div>
-
-                                <div class="news-block-date">
-                                    <p>
-                                        <i class="bi-calendar4 custom-icon me-1"></i>
-                                        October 24, 2036
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
 
                         <div class="category-block d-flex flex-column">
                             <h5 class="mb-3">Categories</h5>
@@ -290,7 +199,7 @@
 
                             <a href="agriculture.html" class="category-block-link">Agriculture<span class="badge">4</span></a>
 
-                            <a href="resources.html" class="category-block-link">Annual Reports<span class="badge">1</span></a>
+                            <a href="resources.php" class="category-block-link">Annual Reports<span class="badge">1</span></a>
                         </div>
 
                         <div class="tags-block">
@@ -336,7 +245,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body pb-4">
-                    <form action="news.html" method="get">
+                    <form action="news.php" method="get">
                         <div class="input-group">
                             <input type="search" name="q" class="form-control form-control-lg" placeholder="Search programs, news, reports...">
                             <button class="btn custom-btn" type="submit"><i class="bi-search"></i></button>
@@ -370,12 +279,12 @@
                 <div class="col-lg-2 col-md-4 col-6">
                     <h5 class="site-footer-title">Quick Links</h5>
                     <ul class="footer-menu">
-                        <li class="footer-menu-item"><a href="index.html" class="footer-menu-link">Home</a></li>
+                        <li class="footer-menu-item"><a href="index.php" class="footer-menu-link">Home</a></li>
                         <li class="footer-menu-item"><a href="about.html" class="footer-menu-link">About Us</a></li>
                         <li class="footer-menu-item"><a href="what-we-do.html" class="footer-menu-link">What We Do</a></li>
                         <li class="footer-menu-item"><a href="where-we-work.html" class="footer-menu-link">Where We Work</a></li>
-                        <li class="footer-menu-item"><a href="resources.html" class="footer-menu-link">Resources</a></li>
-                        <li class="footer-menu-item"><a href="news.html" class="footer-menu-link">Latest</a></li>
+                        <li class="footer-menu-item"><a href="resources.php" class="footer-menu-link">Resources</a></li>
+                        <li class="footer-menu-item"><a href="news.php" class="footer-menu-link">Latest</a></li>
                     </ul>
                 </div>
 

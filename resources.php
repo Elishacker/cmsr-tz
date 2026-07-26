@@ -1,10 +1,15 @@
+<?php
+require __DIR__ . '/config/db.php';
+$reports = $pdo->query('SELECT * FROM reports ORDER BY year DESC, id DESC')->fetchAll();
+$resourceDocs = $pdo->query('SELECT * FROM resources ORDER BY id DESC')->fetchAll();
+?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="CMSR-TZ programs across education, health, women empowerment and agriculture in Tanzania.">
-    <title>What We Do | CMSR-TZ Tanzania</title>
+    <meta name="description" content="CMSR-TZ annual reports, publications and program documentation for download.">
+    <title>Resources | CMSR-TZ Tanzania</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-icons.css" rel="stylesheet">
     <link href="css/templatemo-kind-heart-charity.css" rel="stylesheet">
@@ -52,12 +57,10 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="what-we-do.html" role="button" data-bs-toggle="dropdown">WHAT WE DO</a>
                         <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="water-sanitation.html">Water &amp; Sanitation</a></li>
-                            <li><a class="dropdown-item" href="health.html">Health</a></li>
                             <li><a class="dropdown-item" href="education.html">Education &#8211; Shule Program</a></li>
-                            <li><a class="dropdown-item" href="agriculture.html">Agriculture</a></li>
-                            <li><a class="dropdown-item" href="youth-empowerment.html">Youth Empowerment</a></li>
+                            <li><a class="dropdown-item" href="health.html">Health</a></li>
                             <li><a class="dropdown-item" href="women-empowerment.html">Women Empowerment &#8211; SWALA</a></li>
+                            <li><a class="dropdown-item" href="agriculture.html">Agriculture</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -83,109 +86,73 @@
     </nav>
     <section class="section-bg section-padding" style="padding-top:120px;padding-bottom:50px;">
         <div class="container">
-            <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.php">Home</a></li><li class="breadcrumb-item active">What We Do</li></ol></nav>
-            <h1 class="mt-2">What We Do</h1>
+            <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.php">Home</a></li><li class="breadcrumb-item active">Resources</li></ol></nav>
+            <h1 class="mt-2">Resources</h1>
         </div>
     </section>
     <main>
-        <section class="section-padding">
+        <section class="section-padding" id="annual-reports">
             <div class="container">
                 <div class="col-12 text-center mb-5">
-                    <small class="small-title">Our Sectors</small>
-                    <h2>What We Do</h2>
-                    <p class="col-lg-8 mx-auto">In line with our 5-year Strategic Plan (2025–2029), CMSR-TZ implements social development projects in collaboration with development partners and communities across five key sectors.</p>
+                    <small class="small-title">Publications &amp; Downloads</small>
+                    <h2>Resources</h2>
+                    <p class="col-lg-8 mx-auto">Access CMSR-TZ annual reports, publications, and documentation on our programs and activities.</p>
                 </div>
+                <h3 class="mb-4">Annual Reports</h3>
                 <div class="row g-4">
-                    <div class="col-lg-6 col-12">
+                    <?php foreach ($reports as $r): ?>
+                    <div class="col-lg-4 col-md-6 col-12">
                         <div class="p-4 border rounded h-100">
-                            <i class="bi-droplet-fill fs-2 text-primary mb-3 d-block"></i>
-                            <h3><a href="water-sanitation.html" class="text-decoration-none">Water &amp; Sanitation</a></h3>
-                            <p>CMSR-TZ builds water infrastructure that gives rural communities and schools lasting access to clean water, including deep water wells, solar-powered pumps, and distribution stations.</p>
-                            <ul>
-                                <li>Deep water well &amp; solar pump system, Rulenge, Kagera Region</li>
-                                <li>Water distribution stations constructed</li>
-                                <li>Water storage tanks at PMHM partner schools</li>
-                            </ul>
-                            <a href="water-sanitation.html" class="custom-btn btn btn-sm">Learn More</a>
+                            <i class="bi-file-earmark-text-fill fs-2 text-primary mb-3 d-block"></i>
+                            <h5><?= htmlspecialchars($r['title']) ?> <span class="text-muted">(<?= htmlspecialchars($r['year']) ?>)</span></h5>
+                            <p><?= htmlspecialchars($r['description']) ?></p>
+                            <?php if ($r['file_link']): ?>
+                            <a href="<?= htmlspecialchars($r['file_link']) ?>" class="custom-btn btn btn-sm" download>
+                                <i class="bi-download me-2"></i>Download Report
+                            </a>
+                            <?php else: ?>
+                            <span class="badge bg-secondary">Coming Soon</span>
+                            <?php endif; ?>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-12">
-                        <div class="p-4 border rounded h-100">
-                            <i class="bi-book-fill fs-2 text-primary mb-3 d-block"></i>
-                            <h3><a href="education.html" class="text-decoration-none">Education &#8211; Shule Program</a></h3>
-                            <p>The Shule Program is a distance education support programme supporting students facing financial hardship in secondary schools across Dodoma Region. Active since 2001, it supports 245+ students with school fees, materials, and donor connections.</p>
-                            <ul>
-                                <li>8 secondary schools in Dodoma Region</li>
-                                <li>245+ sponsored students</li>
-                                <li>Funded by Italian donors via CMSR-Italy</li>
-                            </ul>
-                            <a href="education.html" class="custom-btn btn btn-sm">Learn More</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <div class="p-4 border rounded h-100">
-                            <i class="bi-heart-pulse-fill fs-2 text-primary mb-3 d-block"></i>
-                            <h3><a href="health.html" class="text-decoration-none">Health</a></h3>
-                            <p>CMSR-TZ implements two health programs: the Promotion of Menstrual Health Management (PMHM) targeting 14 secondary schools, and the IMaNHC project improving Maternal and Neonatal Health Care in Dodoma and Zanzibar.</p>
-                            <ul>
-                                <li>PMHM: 14 secondary schools in Dodoma</li>
-                                <li>IMaNHC: Multi-country project (Tanzania + Zanzibar)</li>
-                                <li>Partners: CUAMM, Ministry of Health, TAMISEMI</li>
-                            </ul>
-                            <a href="health.html" class="custom-btn btn btn-sm">Learn More</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <div class="p-4 border rounded h-100">
-                            <i class="bi-gender-female fs-2 text-primary mb-3 d-block"></i>
-                            <h3><a href="women-empowerment.html" class="text-decoration-none">Women Empowerment &#8211; SWALA</a></h3>
-                            <p>The SWALA Program empowers women economically through tailoring activities at Chikopelo Bwawani village, Bahi District. The NGUVU KAZI group of 7 women produces kitenge handcrafted products for export to Italy.</p>
-                            <ul>
-                                <li>Active since 2016, Chikopelo Bwawani, Bahi District</li>
-                                <li>Products: Shopping bags, pouches, accessories, sanitary pads</li>
-                                <li>Supported by CMSR-Italy / Bottega del Mondo, Livorno</li>
-                            </ul>
-                            <a href="women-empowerment.html" class="custom-btn btn btn-sm">Learn More</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <div class="p-4 border rounded h-100">
-                            <i class="bi-flower1 fs-2 text-primary mb-3 d-block"></i>
-                            <h3><a href="agriculture.html" class="text-decoration-none">Agriculture &amp; Livelihoods</a></h3>
-                            <p>CMSR-TZ leads two agriculture projects: Sekondari ya Kilimo (agricultural school) and the Rulenge project in Kagera Region, providing agricultural training, water infrastructure, entrepreneurship, and renewable energy solutions.</p>
-                            <ul>
-                                <li>Sekondari ya Kilimo: Agricultural school construction</li>
-                                <li>Rulenge, Ngara District: Water well, solar energy, classrooms</li>
-                                <li>Women entrepreneurship and Jatropha cultivation</li>
-                            </ul>
-                            <a href="agriculture.html" class="custom-btn btn btn-sm">Learn More</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <div class="p-4 border rounded h-100">
-                            <i class="bi-shield-check fs-2 text-primary mb-3 d-block"></i>
-                            <h3><a href="youth-empowerment.html" class="text-decoration-none">Youth Empowerment</a></h3>
-                            <p>Through the Rulenge Project in Kagera Region, CMSR-TZ delivers juvenile justice studies and gender &amp; minor rights training that equip young people with the knowledge to build safer, more independent futures.</p>
-                            <ul>
-                                <li>Juvenile justice studies, Rulenge, Ngara District</li>
-                                <li>Gender and minor rights training</li>
-                                <li>Access to entrepreneurship &amp; vocational skills training</li>
-                            </ul>
-                            <a href="youth-empowerment.html" class="custom-btn btn btn-sm">Learn More</a>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
+                    <?php if (!$reports): ?>
+                    <div class="col-12"><p class="text-muted">No reports published yet.</p></div>
+                    <?php endif; ?>
                 </div>
-            </div>
-        </section>
-        <section class="cta-section section-padding section-bg">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 col-12 mb-4 mb-lg-0">
-                        <h2 class="text-white mb-2">Support Our Programs</h2>
-                        <p class="text-white mb-0">Your support enables CMSR-TZ to continue serving the most at-risk populations in rural Tanzania.</p>
+
+                <h3 class="mt-5 mb-4" id="publications">Publications &amp; Program Documents</h3>
+                <div class="row g-4">
+                    <?php foreach ($resourceDocs as $doc): ?>
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="p-4 border rounded h-100">
+                            <i class="bi-journal-bookmark-fill fs-2 text-primary mb-3 d-block"></i>
+                            <h5><?= htmlspecialchars($doc['title']) ?></h5>
+                            <p><?= htmlspecialchars($doc['description']) ?></p>
+                            <?php if ($doc['file_link']): ?>
+                            <a href="<?= htmlspecialchars($doc['file_link']) ?>" class="custom-btn btn btn-sm" download>
+                                <i class="bi-download me-2"></i>Download
+                            </a>
+                            <?php else: ?>
+                            <span class="badge bg-secondary">Coming Soon</span>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                    <div class="col-lg-4 col-12">
-                        
+                    <?php endforeach; ?>
+                    <?php if (!$resourceDocs): ?>
+                    <div class="col-12"><p class="text-muted">No publications posted yet.</p></div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="mt-5 p-4 section-bg rounded">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8 col-12 mb-3 mb-lg-0">
+                            <h4>Need More Information?</h4>
+                            <p class="mb-0">For program documentation, partnership inquiries, or donor reports, contact CMSR-TZ directly.</p>
+                        </div>
+                        <div class="col-lg-4 col-12">
+                            <a href="mailto:info@cmsr-tz.org" class="custom-btn btn">Contact Us</a>
+                        </div>
                     </div>
                 </div>
             </div>
