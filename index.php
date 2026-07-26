@@ -165,7 +165,7 @@ $updates = $pdo->query('SELECT * FROM updates ORDER BY id DESC LIMIT 5')->fetchA
         <?php endif; ?>
 
         <!-- STATS -->
-        <section class="section-padding impact-stats">
+        <section class="section-padding section-bg impact-stats">
             <div class="container">
                 <div class="row">
                     <div class="col-12 text-center mb-5">

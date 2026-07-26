@@ -24,6 +24,14 @@ const SECTIONS = [
             'description' => 'description', 'link' => 'link',
         ],
     ],
+    'projects' => [
+        'table' => 'projects',
+        'order' => 'sort_order ASC, id ASC',
+        'columns' => [
+            'image' => 'image', 'category' => 'category', 'title' => 'title',
+            'description' => 'description', 'link' => 'link',
+        ],
+    ],
     'news' => [
         'table' => 'news',
         'order' => 'id DESC',

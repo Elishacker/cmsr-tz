@@ -642,12 +642,13 @@
       <div class="nav-item" data-tab="slideshow" onclick="setTab('slideshow')"><span class="nav-num">02</span>Slide Show</div>
       <div class="nav-item" data-tab="overview" onclick="setTab('overview')"><span class="nav-num">03</span>Overview</div>
       <div class="nav-item" data-tab="programs" onclick="setTab('programs')"><span class="nav-num">04</span>Programs</div>
-      <div class="nav-item" data-tab="news" onclick="setTab('news')"><span class="nav-num">05</span>News</div>
-      <div class="nav-item" data-tab="resources" onclick="setTab('resources')"><span class="nav-num">06</span>Resources</div>
-      <div class="nav-item" data-tab="reports" onclick="setTab('reports')"><span class="nav-num">07</span>Reports</div>
-      <div class="nav-item" data-tab="updates" onclick="setTab('updates')"><span class="nav-num">08</span>Updates</div>
+      <div class="nav-item" data-tab="projects" onclick="setTab('projects')"><span class="nav-num">05</span>Projects</div>
+      <div class="nav-item" data-tab="news" onclick="setTab('news')"><span class="nav-num">06</span>News</div>
+      <div class="nav-item" data-tab="resources" onclick="setTab('resources')"><span class="nav-num">07</span>Resources</div>
+      <div class="nav-item" data-tab="reports" onclick="setTab('reports')"><span class="nav-num">08</span>Reports</div>
+      <div class="nav-item" data-tab="updates" onclick="setTab('updates')"><span class="nav-num">09</span>Updates</div>
       <div class="nav-group-label" id="admin-group-label">Administration</div>
-      <div class="nav-item" data-tab="users" id="nav-users" onclick="setTab('users')"><span class="nav-num">09</span>Create User</div>
+      <div class="nav-item" data-tab="users" id="nav-users" onclick="setTab('users')"><span class="nav-num">10</span>Create User</div>
 
       <div class="sidebar-footer">
         <div class="who"><b id="who-name">—</b><span id="who-role">—</span></div>
@@ -670,7 +671,7 @@ let activeTab = 'dashboard';
 let editing = {}; // sectionKey -> id currently being edited (or null)
 let pendingArchiveFile = null;
 let data = {
-  archive: [], slideshow: [], overview: null, programs: [], news: [],
+  archive: [], slideshow: [], overview: null, programs: [], projects: [], news: [],
   resources: [], reports: [], updates: [], users: []
 };
 
@@ -699,6 +700,18 @@ const SECTIONS = {
       {name:'title', label:'Program title', type:'text', required:true, placeholder:'Shule Program'},
       {name:'description', label:'Description', type:'textarea'},
       {name:'link', label:'Link (page URL)', type:'text', placeholder:'education.html'},
+    ],
+    titleField:'title', subField:'category', imageField:'image',
+  },
+  projects: {
+    label: 'Projects',
+    desc: 'Individual named projects listed on the Projects page, e.g. "Promotion of Menstrual Health Management (PMHM)".',
+    fields: [
+      {name:'image', label:'Image URL / path', type:'imageSelect', required:true, placeholder:'Search archive or paste a URL/path'},
+      {name:'category', label:'Sector label', type:'text', required:true, placeholder:'Health'},
+      {name:'title', label:'Project title', type:'text', required:true, placeholder:'Promotion of Menstrual Health Management (PMHM)'},
+      {name:'description', label:'Description', type:'textarea'},
+      {name:'link', label:'Link (page URL)', type:'text', placeholder:'health.html'},
     ],
     titleField:'title', subField:'category', imageField:'image',
   },

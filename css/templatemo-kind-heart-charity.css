@@ -817,23 +817,51 @@ strong {
 .impact-stats .stat-card {
   background: var(--white-color);
   border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
 }
 
 .impact-stats .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px);
+  border-color: var(--primary-color);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.1);
+}
+
+.impact-stats .stat-icon-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(91, 193, 172, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  transition: all 0.3s ease;
+}
+
+.impact-stats .stat-card:hover .stat-icon-badge {
+  background: var(--primary-color);
 }
 
 .impact-stats .stat-icon {
-  font-size: 28px;
+  font-size: 24px;
   color: var(--primary-color);
-  margin-bottom: 8px;
   display: block;
+  transition: all 0.3s ease;
+}
+
+.impact-stats .stat-card:hover .stat-icon {
+  color: var(--white-color);
 }
 
 .impact-stats .counter-thumb {
   margin: 0;
+}
+
+.impact-stats .counter-text {
+  font-size: 14px;
+  font-weight: 500;
 }
 
 

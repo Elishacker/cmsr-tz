@@ -109,6 +109,25 @@ INSERT INTO programs (image, category, title, description, link, sort_order) VAL
   ('photos/agriculture/sekondari-overview.jpeg', 'Agriculture', 'Agriculture & Livelihoods', 'Sekondari ya Kilimo and Rulenge projects providing agricultural training, water infrastructure and entrepreneurship in Kagera Region.', 'agriculture.html', 4);
 
 -- ---------------------------------------------------------------------
+-- Projects page — individual named projects (finer-grained than the
+-- sector-level "programs" cards above)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS projects (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  image VARCHAR(500) NOT NULL,
+  category VARCHAR(100) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  link VARCHAR(255) DEFAULT '',
+  sort_order INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO projects (image, category, title, description, link, sort_order) VALUES
+  ('photos/health/pmhm/pmhm-team-photo.jpeg', 'Health', 'Promotion of Menstrual Health Management (PMHM)', 'Targets secondary school students across 14 schools in Dodoma Region to promote menstrual health awareness and provide practical solutions, including washable sanitary pads produced by the SWALA women''s group.', 'health.html', 1),
+  ('photos/health/imanHC/imanHC-overview.jpeg', 'Health', 'Improving Maternal & Neonatal Health Care (IMaNHC)', 'A multi-country project led by CMSR-TZ, implemented in Dodoma City Council and Zanzibar (with partner CUAMM), strengthening CEmONC facilities for maternal and neonatal care. Phased out successfully in 2025.', 'health.html', 2);
+
+-- ---------------------------------------------------------------------
 -- Latest News & Updates cards + full article body for news-detail.php
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS news (
