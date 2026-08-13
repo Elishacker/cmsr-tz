@@ -1,455 +1,123 @@
 <?php
-require __DIR__ . '/config/db.php';
+/** Single news article. */
 
-$id = (int)($_GET['id'] ?? 0);
-$stmt = $pdo->prepare('SELECT * FROM news WHERE id = ?');
-$stmt->execute([$id]);
-$article = $stmt->fetch();
+require_once __DIR__ . '/includes/functions.php';
+
+$slug = (string) get('slug');
+$article = fetch_one('SELECT * FROM news WHERE slug = ? AND is_published = 1', [$slug]);
 
 if (!$article) {
-    header('Location: news.php');
+    http_response_code(404);
+    $pageTitle = 'Article not found';
+    require __DIR__ . '/includes/header.php';
+    echo '<section class="section-padding"><div class="container text-center py-5">'
+        . '<h2 class="mb-3">Article not found</h2>'
+        . '<p class="mb-4">This article may have been moved or removed.</p>'
+        . '<a href="' . url('news.php') . '" class="custom-btn btn">All news</a>'
+        . '</div></section>';
+    require __DIR__ . '/includes/footer.php';
     exit;
 }
 
-$bodyParagraphs = $article['body']
-    ? array_values(array_filter(array_map('trim', explode("\n", $article['body']))))
-    : array_values(array_filter([trim((string)$article['excerpt'])]));
+// Count the read once per session.
+$seen = $_SESSION['news_seen'] ?? [];
+if (!in_array((int) $article['id'], $seen, true)) {
+    q('UPDATE news SET views = views + 1 WHERE id = ?', [$article['id']]);
+    $seen[] = (int) $article['id'];
+    $_SESSION['news_seen'] = $seen;
+}
 
-$others = $pdo->prepare('SELECT * FROM news WHERE id <> ? ORDER BY id DESC LIMIT 4');
-$others->execute([$id]);
-$otherNews = $others->fetchAll();
-$recentNews = array_slice($otherNews, 0, 2);
-$relatedNews = array_slice($otherNews, 0, 2);
+$recent = fetch_all('SELECT id, slug, title, image, news_date FROM news WHERE is_published = 1 AND id <> ? ORDER BY news_date DESC LIMIT 4', [$article['id']]);
+$prev   = fetch_one('SELECT slug, title FROM news WHERE is_published = 1 AND news_date < ? ORDER BY news_date DESC LIMIT 1', [$article['news_date']]);
+$next   = fetch_one('SELECT slug, title FROM news WHERE is_published = 1 AND news_date > ? ORDER BY news_date ASC LIMIT 1', [$article['news_date']]);
+$tags   = array_values(array_filter(array_map('trim', explode(',', (string) $article['tags']))));
+
+$pageTitle       = $article['title'];
+$pageDescription = excerpt($article['excerpt'] ?: $article['body'], 200);
+
+require __DIR__ . '/includes/header.php';
+
+$heroTitle    = $article['title'];
+$heroSubtitle = fdate($article['news_date']) . ' · ' . $article['category'];
+$heroImage    = $article['image'];
+$heroCrumbs   = ['Latest' => 'news.php', excerpt($article['title'], 50) => ''];
+require __DIR__ . '/includes/page-hero.php';
 ?>
-<!doctype html>
-<html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<section class="section-padding">
+    <div class="container">
+        <div class="row">
 
-    <meta name="description" content="<?= htmlspecialchars($article['excerpt'] ?? '') ?>">
-    <meta name="author" content="">
+            <div class="col-lg-8 col-12">
+                <img src="<?= h(img($article['image'], 1200)) ?>" class="img-fluid rounded shadow-lg mb-4" alt="<?= h($article['title']) ?>">
 
-    <title><?= htmlspecialchars($article['title']) ?> | CMSR-TZ Tanzania</title>
-
-    <!-- CSS FILES -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="css/bootstrap-icons.css" rel="stylesheet">
-
-    <link href="css/templatemo-kind-heart-charity.css" rel="stylesheet">
-    <!--
-
--->
-</head>
-
-<body>
-    <header class="site-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-12 d-flex flex-wrap">
-                    <p class="d-flex me-4 mb-0"><i class="bi-geo-alt me-2"></i>Dodoma City, Tanzania</p>
-                    <p class="d-flex mb-0"><i class="bi-envelope me-2"></i><a href="mailto:info@cmsr-tz.org">info@cmsr-tz.org</a></p>
+                <div class="d-flex flex-wrap align-items-center mb-4" style="font-size:14px;color:var(--p-color);gap:24px;">
+                    <span><i class="bi-calendar4 text-primary me-1"></i><?= h(fdate($article['news_date'])) ?></span>
+                    <span><i class="bi-person text-primary me-1"></i><?= h($article['author']) ?></span>
+                    <span><i class="bi-folder text-primary me-1"></i><?= h($article['category']) ?></span>
+                    <span><i class="bi-eye text-primary me-1"></i><?= (int) $article['views'] ?> views</span>
                 </div>
-                <div class="col-lg-3 col-12 ms-auto d-lg-block d-none">
-                    <ul class="social-icon">
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-facebook"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-instagram"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-youtube"></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-    <nav class="navbar navbar-expand-lg bg-light shadow-lg">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <img src="images/logo.png" class="logo img-fluid" alt="CMSR-TZ">
-                <span>CMSR-TZ<small>Community Mobilisation for Reciprocal Development</small></span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="index.php">HOME</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="about.html" role="button" data-bs-toggle="dropdown">ABOUT US</a>
-                        <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="who-we-are.html">Who We Are</a></li>
-                            <li><a class="dropdown-item" href="vision-mission.html">Vision &amp; Mission</a></li>
-                            <li><a class="dropdown-item" href="core-values.html">Core Values</a></li>
-                            <li><a class="dropdown-item" href="board.html">Board of Directors</a></li>
-                            <li><a class="dropdown-item" href="leadership.html">Leadership</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="what-we-do.html" role="button" data-bs-toggle="dropdown">WHAT WE DO</a>
-                        <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="education.html">Education &#8211; Shule Program</a></li>
-                            <li><a class="dropdown-item" href="health.html">Health</a></li>
-                            <li><a class="dropdown-item" href="women-empowerment.html">Women Empowerment &#8211; SWALA</a></li>
-                            <li><a class="dropdown-item" href="agriculture.html">Agriculture</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="where-we-work.html" role="button" data-bs-toggle="dropdown">WHERE WE WORK</a>
-                        <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="where-we-work.html#dodoma">Dodoma Region</a></li>
-                            <li><a class="dropdown-item" href="where-we-work.html#kagera">Kagera Region</a></li>
-                            <li><a class="dropdown-item" href="where-we-work.html#zanzibar">Zanzibar</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="resources.php" role="button" data-bs-toggle="dropdown">RESOURCES</a>
-                        <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="resources.html#annual-reports">Annual Reports</a></li>
-                            <li><a class="dropdown-item" href="resources.html#publications">Publications</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="news.php">LATEST</a></li>
-                    <li class="nav-item"><a class="nav-link custom-btn btn staff-btn" href="staff-login.html"><i class="bi-person-lock me-1"></i>STAFF</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <main>
+                <?php if ($article['excerpt']): ?>
+                    <p class="lead mb-4" style="font-size:18px;line-height:1.7;color:var(--secondary-color);"><?= h($article['excerpt']) ?></p>
+                <?php endif; ?>
 
-        <section class="news-detail-header-section text-center">
-            <div class="section-overlay"></div>
+                <div class="prose"><?= safe_html($article['body']) ?></div>
 
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-12 col-12">
-                        <h1 class="text-white"><?= htmlspecialchars($article['title']) ?></h1>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <section class="news-section section-padding">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-7 col-12">
-                        <div class="news-block">
-                            <div class="news-block-top">
-                                <img src="<?= htmlspecialchars($article['image']) ?>"
-                                    class="news-image img-fluid" alt="<?= htmlspecialchars($article['title']) ?>">
-                            </div>
-
-                            <div class="news-block-info">
-                                <div class="d-flex mt-2">
-                                    <div class="news-block-date">
-                                        <p>
-                                            <i class="bi-calendar4 custom-icon me-1"></i>
-                                            <?= htmlspecialchars($article['news_date']) ?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="news-block-title mb-2">
-                                    <h4><?= htmlspecialchars($article['title']) ?></h4>
-                                </div>
-
-                                <div class="news-block-body">
-                                    <?php foreach ($bodyParagraphs as $para): ?>
-                                    <p><?= htmlspecialchars($para) ?></p>
-                                    <?php endforeach; ?>
-                                </div>
-
-                                <div class="social-share border-top mt-5 py-4 d-flex flex-wrap align-items-center">
-                                    <div class="me-auto text-muted small">Share this story</div>
-                                    <div class="d-flex">
-                                        <a href="#" class="social-icon-link bi-facebook"></a>
-                                        <a href="#" class="social-icon-link bi-twitter"></a>
-                                        <a href="#" class="social-icon-link bi-printer"></a>
-                                        <a href="#" class="social-icon-link bi-envelope"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-12 mx-auto mt-4 mt-lg-0">
-                        <form class="custom-form search-form" action="#" method="post">
-                            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-
-                            <button type="submit" class="form-control" title="Search">
-                                <i class="bi-search"></i>
-                            </button>
-                        </form>
-
-                        <?php if ($recentNews): ?>
-                        <h5 class="mt-5 mb-3">Recent news</h5>
-
-                        <?php foreach ($recentNews as $rn): ?>
-                        <div class="news-block news-block-two-col d-flex mt-4">
-                            <div class="news-block-two-col-image-wrap">
-                                <a href="news-detail.php?id=<?= (int)$rn['id'] ?>">
-                                    <img src="<?= htmlspecialchars($rn['image']) ?>"
-                                        class="news-image img-fluid" alt="<?= htmlspecialchars($rn['title']) ?>">
-                                </a>
-                            </div>
-
-                            <div class="news-block-two-col-info">
-                                <div class="news-block-title mb-2">
-                                    <h6><a href="news-detail.php?id=<?= (int)$rn['id'] ?>" class="news-block-title-link"><?= htmlspecialchars($rn['title']) ?></a>
-                                    </h6>
-                                </div>
-
-                                <div class="news-block-date">
-                                    <p>
-                                        <i class="bi-calendar4 custom-icon me-1"></i>
-                                        <?= htmlspecialchars($rn['news_date']) ?>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                <?php if ($tags): ?>
+                    <div class="tags-block mt-5">
+                        <h5 class="mb-3">Tags</h5>
+                        <?php foreach ($tags as $tag): ?>
+                            <a href="<?= url('news.php?q=' . rawurlencode($tag)) ?>" class="tags-block-link"><?= h($tag) ?></a>
                         <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="row mt-5 pt-4 border-top">
+                    <div class="col-6">
+                        <?php if ($prev): ?>
+                            <a href="<?= url('news-detail.php?slug=' . $prev['slug']) ?>" style="color:var(--secondary-color);text-decoration:none;font-size:14px;">
+                                <i class="bi-arrow-left me-1 text-primary"></i><?= h(excerpt($prev['title'], 45)) ?>
+                            </a>
                         <?php endif; ?>
-
-                        <div class="category-block d-flex flex-column">
-                            <h5 class="mb-3">Categories</h5>
-
-                            <a href="#" class="category-block-link">
-                                Drinking water
-                                <span class="badge">20</span>
-                            </a>
-
-                            <a href="#" class="category-block-link">
-                                Food Donation
-                                <span class="badge">30</span>
-                            </a>
-
-                            <a href="#" class="category-block-link">
-                                Children Education
-                                <span class="badge">10</span>
-                            </a>
-
-                            <a href="#" class="category-block-link">
-                                Poverty Development
-                                <span class="badge">15</span>
-                            </a>
-
-                            <a href="#" class="category-block-link">
-                                Clothing Donation
-                                <span class="badge">20</span>
-                            </a>
-                        </div>
-
-                        <div class="tags-block">
-                            <h5 class="mb-3">Tags</h5>
-
-                            <a href="#" class="tags-block-link">
-                                Donation
-                            </a>
-
-                            <a href="#" class="tags-block-link">
-                                Clothing
-                            </a>
-
-                            <a href="#" class="tags-block-link">
-                                Food
-                            </a>
-
-                            <a href="#" class="tags-block-link">
-                                Children
-                            </a>
-
-                            <a href="#" class="tags-block-link">
-                                Education
-                            </a>
-
-                            <a href="#" class="tags-block-link">
-                                Poverty
-                            </a>
-
-                            <a href="#" class="tags-block-link">
-                                Clean Water
-                            </a>
-                        </div>
-
-                        <form class="custom-form subscribe-form" action="#" method="post" aria-label="Newsletter subscription form">
-                            <h5 class="mb-4">Newsletter Form</h5>
-
-                            <label for="subscribe-email">Email Address</label>
-                            <input type="email" name="subscribe-email" id="subscribe-email" pattern="[^ @]*@[^ @]*"
-                                class="form-control" placeholder="Email Address" required>
-
-                            <div class="col-lg-12 col-12">
-                                <button type="submit" class="form-control">Subscribe</button>
-                            </div>
-                        </form>
                     </div>
-
+                    <div class="col-6 text-end">
+                        <?php if ($next): ?>
+                            <a href="<?= url('news-detail.php?slug=' . $next['slug']) ?>" style="color:var(--secondary-color);text-decoration:none;font-size:14px;">
+                                <?= h(excerpt($next['title'], 45)) ?><i class="bi-arrow-right ms-1 text-primary"></i>
+                            </a>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
-        </section>
 
-        <?php if ($relatedNews): ?>
-        <section class="news-section section-padding section-bg">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-12 col-12 mb-4">
-                        <h2>Related news</h2>
-                    </div>
-
-                    <?php foreach ($relatedNews as $rel): ?>
-                    <div class="col-lg-6 col-12">
-                        <div class="news-block">
-                            <div class="news-block-top">
-                                <a href="news-detail.php?id=<?= (int)$rel['id'] ?>">
-                                    <img src="<?= htmlspecialchars($rel['image']) ?>"
-                                        class="news-image img-fluid" alt="<?= htmlspecialchars($rel['title']) ?>">
+            <div class="col-lg-4 col-12 mt-5 mt-lg-0">
+                <?php if ($recent): ?>
+                    <div class="sidebar-block" style="background:var(--section-bg-color);">
+                        <h5>More news</h5>
+                        <?php foreach ($recent as $item): ?>
+                            <div class="sidebar-news-item">
+                                <a href="<?= url('news-detail.php?slug=' . $item['slug']) ?>">
+                                    <img src="<?= h(img($item['image'], 240)) ?>" alt="<?= h($item['title']) ?>">
                                 </a>
-                            </div>
-
-                            <div class="news-block-info">
-                                <div class="d-flex mt-2">
-                                    <div class="news-block-date">
-                                        <p>
-                                            <i class="bi-calendar4 custom-icon me-1"></i>
-                                            <?= htmlspecialchars($rel['news_date']) ?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="news-block-title mb-2">
-                                    <h4><a href="news-detail.php?id=<?= (int)$rel['id'] ?>" class="news-block-title-link"><?= htmlspecialchars($rel['title']) ?></a></h4>
-                                </div>
-
-                                <div class="news-block-body">
-                                    <p><?= htmlspecialchars($rel['excerpt']) ?></p>
+                                <div>
+                                    <a href="<?= url('news-detail.php?slug=' . $item['slug']) ?>"><?= h(excerpt($item['title'], 60)) ?></a>
+                                    <div class="news-date mt-1" style="font-size:12px;"><?= h(fdate($item['news_date'], 'j M Y')) ?></div>
                                 </div>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
+                <?php endif; ?>
 
+                <div class="sidebar-block" style="background:var(--section-bg-color);">
+                    <h5>Support our work</h5>
+                    <p style="font-size:15px;">Every contribution goes directly into community development projects in rural Tanzania.</p>
+                    <a href="<?= url('donate.php') ?>" class="custom-btn btn w-100">Support us</a>
                 </div>
             </div>
-        </section>
-        <?php endif; ?>
-    </main>
 
-    <div class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title">Search CMSR-TZ</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body pb-4">
-                    <form action="news.php" method="get">
-                        <div class="input-group">
-                            <input type="search" name="q" class="form-control form-control-lg" placeholder="Search programs, news, reports...">
-                            <button class="btn custom-btn" type="submit"><i class="bi-search"></i></button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
-    <footer class="site-footer">
-        <div class="container">
-            <div class="row g-4">
+</section>
 
-                <!-- Brand -->
-                <div class="col-lg-4 col-12">
-                    <img src="images/logo.png" class="logo img-fluid mb-3" alt="CMSR-TZ">
-                    <h5 class="text-white mb-2">CMSR-TZ</h5>
-                    <p class="text-white-50 mb-3" style="font-size:14px;line-height:1.6;">
-                        Community Mobilisation for Reciprocal Development in Tanzania.<br>
-                        Established 1997 &mdash; Reg. No. 00NGO/R1/00411.
-                    </p>
-                    <ul class="social-icon">
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-facebook" aria-label="Facebook"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-instagram" aria-label="Instagram"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-youtube" aria-label="YouTube"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-whatsapp" aria-label="WhatsApp"></a></li>
-                    </ul>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="col-lg-2 col-md-4 col-6">
-                    <h5 class="site-footer-title">Quick Links</h5>
-                    <ul class="footer-menu">
-                        <li class="footer-menu-item"><a href="index.php" class="footer-menu-link">Home</a></li>
-                        <li class="footer-menu-item"><a href="about.html" class="footer-menu-link">About Us</a></li>
-                        <li class="footer-menu-item"><a href="what-we-do.html" class="footer-menu-link">What We Do</a></li>
-                        <li class="footer-menu-item"><a href="where-we-work.html" class="footer-menu-link">Where We Work</a></li>
-                        <li class="footer-menu-item"><a href="resources.php" class="footer-menu-link">Resources</a></li>
-                        <li class="footer-menu-item"><a href="news.php" class="footer-menu-link">Latest</a></li>
-                    </ul>
-                </div>
-
-                <!-- Programs -->
-                <div class="col-lg-2 col-md-4 col-6">
-                    <h5 class="site-footer-title">Programs</h5>
-                    <ul class="footer-menu">
-                        <li class="footer-menu-item"><a href="education.html" class="footer-menu-link">Education</a></li>
-                        <li class="footer-menu-item"><a href="health.html" class="footer-menu-link">Health</a></li>
-                        <li class="footer-menu-item"><a href="women-empowerment.html" class="footer-menu-link">Women Empowerment</a></li>
-                        <li class="footer-menu-item"><a href="agriculture.html" class="footer-menu-link">Agriculture</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact -->
-                <div class="col-lg-4 col-md-4 col-12">
-                    <h5 class="site-footer-title">Contact</h5>
-                    <ul class="list-unstyled mb-0">
-                        <li class="mb-2 d-flex align-items-start">
-                            <i class="bi-geo-alt text-primary me-2 mt-1"></i>
-                            <span class="text-white-75" style="color:rgba(255,255,255,0.75);font-size:14px;">
-                                P.O. Box, Dodoma City, Tanzania
-                            </span>
-                        </li>
-                        <li class="mb-2 d-flex align-items-start">
-                            <i class="bi-envelope text-primary me-2 mt-1"></i>
-                            <a href="mailto:info@cmsr-tz.org" class="site-footer-link" style="font-size:14px;">info@cmsr-tz.org</a>
-                        </li>
-                        <li class="mb-3 d-flex align-items-start">
-                            <i class="bi-patch-check text-primary me-2 mt-1"></i>
-                            <span class="text-white-75" style="color:rgba(255,255,255,0.75);font-size:14px;">
-                                Reg. No: 00NGO/R1/00411
-                            </span>
-                        </li>
-                    </ul>
-                    <a href="donate.html" class="custom-btn btn btn-sm">Support Our Work</a>
-                </div>
-
-            </div>
-        </div>
-        <div class="site-footer-bottom">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 col-12">
-                        <p class="copyright-text mb-0">
-                            Copyright &copy; 2025 CMSR-TZ &mdash; Community Mobilisation for Reciprocal Development, Tanzania.
-                        </p>
-                    </div>
-                    <div class="col-lg-4 col-12 text-lg-end mt-2 mt-lg-0">
-                        <p class="copyright-text mb-0">
-                            <a href="staff-login.html" style="color:rgba(255,255,255,0.5);font-size:13px;">
-                                <i class="bi-person-lock me-1"></i>Staff Login
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.sticky.js"></script>
-    <script src="js/click-scroll.js"></script>
-    <script src="js/custom.js"></script>
-</body>
-</html>
+<?php require __DIR__ . '/includes/footer.php'; ?>

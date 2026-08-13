@@ -1,275 +1,125 @@
 <?php
-require __DIR__ . '/config/db.php';
-$reports = $pdo->query('SELECT * FROM reports ORDER BY year DESC, id DESC')->fetchAll();
-$resourceDocs = $pdo->query('SELECT * FROM resources ORDER BY id DESC')->fetchAll();
+/** Resources — annual reports and publications. */
+
+require_once __DIR__ . '/includes/functions.php';
+
+$reports   = fetch_all('SELECT * FROM reports WHERE is_active = 1 ORDER BY year DESC, sort_order, id');
+$resources = [];
+foreach (fetch_all('SELECT * FROM resources WHERE is_active = 1 ORDER BY sort_order, id') as $row) {
+    $resources[$row['category']][] = $row;
+}
+
+$pageTitle       = 'Resources';
+$pageDescription = 'Annual reports, programme reports and publications from CMSR-TZ.';
+
+require __DIR__ . '/includes/header.php';
+
+$heroTitle    = 'Resources';
+$heroSubtitle = 'Annual reports, programme documentation and publications';
+$heroImage    = 'photos/School Program/IMG_3063 (1).jpeg';
+$heroCrumbs   = ['Resources' => ''];
+require __DIR__ . '/includes/page-hero.php';
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="CMSR-TZ annual reports, publications and program documentation for download.">
-    <title>Resources | CMSR-TZ Tanzania</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-icons.css" rel="stylesheet">
-    <link href="css/templatemo-kind-heart-charity.css" rel="stylesheet">
-</head>
-<body>
-    <header class="site-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-12 d-flex flex-wrap">
-                    <p class="d-flex me-4 mb-0"><i class="bi-geo-alt me-2"></i>Dodoma City, Tanzania</p>
-                    <p class="d-flex mb-0"><i class="bi-envelope me-2"></i><a href="mailto:info@cmsr-tz.org">info@cmsr-tz.org</a></p>
-                </div>
-                <div class="col-lg-3 col-12 ms-auto d-lg-block d-none">
-                    <ul class="social-icon">
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-facebook"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-instagram"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-youtube"></a></li>
-                    </ul>
-                </div>
+
+<!-- ANNUAL REPORTS -->
+<section class="section-padding" id="annual-reports">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-12 mb-5">
+                <span class="section-eyebrow">Accountability</span>
+                <h2 class="mb-3 section-title-underline">Annual reports</h2>
+                <p class="mb-0">Every year the Board approves an implementation report covering all projects and programmes, together
+                    with the income and expenditure statements.</p>
             </div>
-        </div>
-    </header>
-    <nav class="navbar navbar-expand-lg bg-light shadow-lg">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <img src="images/logo.png" class="logo img-fluid" alt="CMSR-TZ">
-                <span>CMSR-TZ<small>Community Mobilisation for Reciprocal Development</small></span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="index.php">HOME</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="about.html" role="button" data-bs-toggle="dropdown">ABOUT US</a>
-                        <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="who-we-are.html">Who We Are</a></li>
-                            <li><a class="dropdown-item" href="vision-mission.html">Vision &amp; Mission</a></li>
-                            <li><a class="dropdown-item" href="core-values.html">Core Values</a></li>
-                            <li><a class="dropdown-item" href="board.html">Board of Directors</a></li>
-                            <li><a class="dropdown-item" href="leadership.html">Leadership</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="what-we-do.html" role="button" data-bs-toggle="dropdown">WHAT WE DO</a>
-                        <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="education.html">Education &#8211; Shule Program</a></li>
-                            <li><a class="dropdown-item" href="health.html">Health</a></li>
-                            <li><a class="dropdown-item" href="women-empowerment.html">Women Empowerment &#8211; SWALA</a></li>
-                            <li><a class="dropdown-item" href="agriculture.html">Agriculture</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="where-we-work.html" role="button" data-bs-toggle="dropdown">WHERE WE WORK</a>
-                        <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="where-we-work.html#dodoma">Dodoma Region</a></li>
-                            <li><a class="dropdown-item" href="where-we-work.html#kagera">Kagera Region</a></li>
-                            <li><a class="dropdown-item" href="where-we-work.html#zanzibar">Zanzibar</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="resources.php" role="button" data-bs-toggle="dropdown">RESOURCES</a>
-                        <ul class="dropdown-menu dropdown-menu-light">
-                            <li><a class="dropdown-item" href="resources.html#annual-reports">Annual Reports</a></li>
-                            <li><a class="dropdown-item" href="resources.html#publications">Publications</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="news.php">LATEST</a></li>
-                    <li class="nav-item"><a class="nav-link custom-btn btn staff-btn" href="staff-login.html"><i class="bi-person-lock me-1"></i>STAFF</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <section class="section-bg section-padding" style="padding-top:120px;padding-bottom:50px;">
-        <div class="container">
-            <nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.php">Home</a></li><li class="breadcrumb-item active">Resources</li></ol></nav>
-            <h1 class="mt-2">Resources</h1>
-        </div>
-    </section>
-    <main>
-        <section class="section-padding" id="annual-reports">
-            <div class="container">
-                <div class="col-12 text-center mb-5">
-                    <small class="small-title">Publications &amp; Downloads</small>
-                    <h2>Resources</h2>
-                    <p class="col-lg-8 mx-auto">Access CMSR-TZ annual reports, publications, and documentation on our programs and activities.</p>
-                </div>
-                <h3 class="mb-4">Annual Reports</h3>
-                <div class="row g-4">
-                    <?php foreach ($reports as $r): ?>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="p-4 border rounded h-100">
-                            <i class="bi-file-earmark-text-fill fs-2 text-primary mb-3 d-block"></i>
-                            <h5><?= htmlspecialchars($r['title']) ?> <span class="text-muted">(<?= htmlspecialchars($r['year']) ?>)</span></h5>
-                            <p><?= htmlspecialchars($r['description']) ?></p>
-                            <?php if ($r['file_link']): ?>
-                            <a href="<?= htmlspecialchars($r['file_link']) ?>" class="custom-btn btn btn-sm" download>
-                                <i class="bi-download me-2"></i>Download Report
-                            </a>
+
+            <?php if (!$reports): ?>
+                <div class="col-12"><p>No annual reports have been published yet.</p></div>
+            <?php endif; ?>
+
+            <?php foreach ($reports as $report): ?>
+                <div class="col-lg-6 col-12 mb-4">
+                    <div class="value-tile d-flex">
+                        <div class="me-4 text-center" style="min-width:88px;">
+                            <div style="background:var(--primary-color);color:#fff;border-radius:var(--border-radius-small);padding:16px 10px;">
+                                <i class="bi-file-earmark-text d-block" style="font-size:26px;"></i>
+                                <strong style="font-size:18px;"><?= h($report['year']) ?></strong>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="mb-2"><?= h($report['title']) ?></h5>
+                            <p class="mb-3"><?= h($report['description']) ?></p>
+                            <?php if ($report['file_link'] !== ''): ?>
+                                <a href="<?= h(url($report['file_link'])) ?>" class="custom-btn btn btn-sm" download>
+                                    <i class="bi-download me-1"></i>Download
+                                </a>
                             <?php else: ?>
-                            <span class="badge bg-secondary">Coming Soon</span>
+                                <a href="<?= url('contact.php?subject=' . rawurlencode('Request: ' . $report['title'])) ?>"
+                                   class="custom-btn custom-border-btn btn btn-sm">Request a copy</a>
                             <?php endif; ?>
                         </div>
                     </div>
-                    <?php endforeach; ?>
-                    <?php if (!$reports): ?>
-                    <div class="col-12"><p class="text-muted">No reports published yet.</p></div>
-                    <?php endif; ?>
                 </div>
-
-                <h3 class="mt-5 mb-4" id="publications">Publications &amp; Program Documents</h3>
-                <div class="row g-4">
-                    <?php foreach ($resourceDocs as $doc): ?>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="p-4 border rounded h-100">
-                            <i class="bi-journal-bookmark-fill fs-2 text-primary mb-3 d-block"></i>
-                            <h5><?= htmlspecialchars($doc['title']) ?></h5>
-                            <p><?= htmlspecialchars($doc['description']) ?></p>
-                            <?php if ($doc['file_link']): ?>
-                            <a href="<?= htmlspecialchars($doc['file_link']) ?>" class="custom-btn btn btn-sm" download>
-                                <i class="bi-download me-2"></i>Download
-                            </a>
-                            <?php else: ?>
-                            <span class="badge bg-secondary">Coming Soon</span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                    <?php if (!$resourceDocs): ?>
-                    <div class="col-12"><p class="text-muted">No publications posted yet.</p></div>
-                    <?php endif; ?>
-                </div>
-
-                <div class="mt-5 p-4 section-bg rounded">
-                    <div class="row align-items-center">
-                        <div class="col-lg-8 col-12 mb-3 mb-lg-0">
-                            <h4>Need More Information?</h4>
-                            <p class="mb-0">For program documentation, partnership inquiries, or donor reports, contact CMSR-TZ directly.</p>
-                        </div>
-                        <div class="col-lg-4 col-12">
-                            <a href="mailto:info@cmsr-tz.org" class="custom-btn btn">Contact Us</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    <div class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title">Search CMSR-TZ</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body pb-4">
-                    <form action="news.php" method="get">
-                        <div class="input-group">
-                            <input type="search" name="q" class="form-control form-control-lg" placeholder="Search programs, news, reports...">
-                            <button class="btn custom-btn" type="submit"><i class="bi-search"></i></button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
-    <footer class="site-footer">
-        <div class="container">
-            <div class="row g-4">
+</section>
 
-                <!-- Brand -->
-                <div class="col-lg-4 col-12">
-                    <img src="images/logo.png" class="logo img-fluid mb-3" alt="CMSR-TZ">
-                    <h5 class="text-white mb-2">CMSR-TZ</h5>
-                    <p class="text-white-50 mb-3" style="font-size:14px;line-height:1.6;">
-                        Community Mobilisation for Reciprocal Development in Tanzania.<br>
-                        Established 1997 &mdash; Reg. No. 00NGO/R1/00411.
-                    </p>
-                    <ul class="social-icon">
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-facebook" aria-label="Facebook"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-instagram" aria-label="Instagram"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-youtube" aria-label="YouTube"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-whatsapp" aria-label="WhatsApp"></a></li>
-                    </ul>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="col-lg-2 col-md-4 col-6">
-                    <h5 class="site-footer-title">Quick Links</h5>
-                    <ul class="footer-menu">
-                        <li class="footer-menu-item"><a href="index.php" class="footer-menu-link">Home</a></li>
-                        <li class="footer-menu-item"><a href="about.html" class="footer-menu-link">About Us</a></li>
-                        <li class="footer-menu-item"><a href="what-we-do.html" class="footer-menu-link">What We Do</a></li>
-                        <li class="footer-menu-item"><a href="where-we-work.html" class="footer-menu-link">Where We Work</a></li>
-                        <li class="footer-menu-item"><a href="resources.php" class="footer-menu-link">Resources</a></li>
-                        <li class="footer-menu-item"><a href="news.php" class="footer-menu-link">Latest</a></li>
-                    </ul>
-                </div>
-
-                <!-- Programs -->
-                <div class="col-lg-2 col-md-4 col-6">
-                    <h5 class="site-footer-title">Programs</h5>
-                    <ul class="footer-menu">
-                        <li class="footer-menu-item"><a href="education.html" class="footer-menu-link">Education</a></li>
-                        <li class="footer-menu-item"><a href="health.html" class="footer-menu-link">Health</a></li>
-                        <li class="footer-menu-item"><a href="women-empowerment.html" class="footer-menu-link">Women Empowerment</a></li>
-                        <li class="footer-menu-item"><a href="agriculture.html" class="footer-menu-link">Agriculture</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact -->
-                <div class="col-lg-4 col-md-4 col-12">
-                    <h5 class="site-footer-title">Contact</h5>
-                    <ul class="list-unstyled mb-0">
-                        <li class="mb-2 d-flex align-items-start">
-                            <i class="bi-geo-alt text-primary me-2 mt-1"></i>
-                            <span class="text-white-75" style="color:rgba(255,255,255,0.75);font-size:14px;">
-                                P.O. Box, Dodoma City, Tanzania
-                            </span>
-                        </li>
-                        <li class="mb-2 d-flex align-items-start">
-                            <i class="bi-envelope text-primary me-2 mt-1"></i>
-                            <a href="mailto:info@cmsr-tz.org" class="site-footer-link" style="font-size:14px;">info@cmsr-tz.org</a>
-                        </li>
-                        <li class="mb-3 d-flex align-items-start">
-                            <i class="bi-patch-check text-primary me-2 mt-1"></i>
-                            <span class="text-white-75" style="color:rgba(255,255,255,0.75);font-size:14px;">
-                                Reg. No: 00NGO/R1/00411
-                            </span>
-                        </li>
-                    </ul>
-                    <a href="donate.html" class="custom-btn btn btn-sm">Support Our Work</a>
-                </div>
-
+<!-- PUBLICATIONS -->
+<section class="section-padding section-bg" id="publications">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-12 mb-5">
+                <span class="section-eyebrow">Library</span>
+                <h2 class="mb-3 section-title-underline">Publications &amp; documentation</h2>
+                <p class="mb-0">Programme reports, sector profiles and reference documents from our work.</p>
             </div>
         </div>
-        <div class="site-footer-bottom">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 col-12">
-                        <p class="copyright-text mb-0">
-                            Copyright &copy; 2025 CMSR-TZ &mdash; Community Mobilisation for Reciprocal Development, Tanzania.
-                        </p>
-                    </div>
-                    <div class="col-lg-4 col-12 text-lg-end mt-2 mt-lg-0">
-                        <p class="copyright-text mb-0">
-                            <a href="staff-login.html" style="color:rgba(255,255,255,0.5);font-size:13px;">
-                                <i class="bi-person-lock me-1"></i>Staff Login
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.sticky.js"></script>
-    <script src="js/click-scroll.js"></script>
-    <script src="js/custom.js"></script>
-</body>
-</html>
+        <?php foreach ($resources as $category => $items): ?>
+            <div class="row mb-4">
+                <div class="col-12 mb-3">
+                    <h4 class="mb-0"><?= h($category) ?><?= substr($category, -1) === 's' ? '' : 's' ?></h4>
+                </div>
+                <?php foreach ($items as $item): ?>
+                    <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="value-tile h-100 d-flex flex-column">
+                            <i class="bi-journal-text"></i>
+                            <h5><?= h($item['title']) ?></h5>
+                            <p><?= h($item['description']) ?></p>
+                            <div class="mt-auto pt-3">
+                                <?php if ($item['file_link'] !== ''): ?>
+                                    <a href="<?= h(url($item['file_link'])) ?>" class="custom-btn btn btn-sm" download>
+                                        <i class="bi-download me-1"></i>Download<?= $item['file_size'] !== '' ? ' (' . h($item['file_size']) . ')' : '' ?>
+                                    </a>
+                                <?php else: ?>
+                                    <a href="<?= url('contact.php?subject=' . rawurlencode('Request: ' . $item['title'])) ?>"
+                                       style="color:var(--primary-color);font-weight:600;font-size:14px;text-decoration:none;">
+                                        Request a copy <i class="bi-arrow-right"></i>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endforeach; ?>
+
+        <?php if (!$resources): ?>
+            <div class="row"><div class="col-12"><p>No publications have been added yet.</p></div></div>
+        <?php endif; ?>
+    </div>
+</section>
+
+<section class="cta-band-full">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between">
+            <div class="mb-3 mb-lg-0">
+                <h3>Looking for a specific document?</h3>
+                <p>Our office can share project documentation, audited statements and proposals on request.</p>
+            </div>
+            <a href="<?= url('contact.php') ?>" class="custom-btn btn">Contact the office</a>
+        </div>
+    </div>
+</section>
+
+<?php require __DIR__ . '/includes/footer.php'; ?>

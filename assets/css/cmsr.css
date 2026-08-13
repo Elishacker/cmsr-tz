@@ -1,0 +1,1806 @@
+/* =====================================================================
+   CMSR-TZ — additions on top of the Kind Heart Charity template.
+   The template's palette is kept exactly as-is:
+     primary  #5bc1ac   secondary #5a6f80
+     footer   #44525d   section bg #f0f8ff
+   ===================================================================== */
+
+/* ---------- Navbar ----------
+   The brand carries a 57-character organisation name and the menu carries
+   six items plus a call to action, so the row is sized deliberately: the
+   brand is allowed to wrap onto a second line rather than squeeze the menu,
+   and the menu tightens in steps as the window narrows. */
+.navbar {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.navbar > .container {
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 0;
+  min-width: 0;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.navbar-brand .logo {
+  width: 52px;
+  flex: 0 0 auto;
+}
+
+.navbar-brand > span {
+  min-width: 0;
+}
+
+.navbar-brand small {
+  max-width: 420px;
+  white-space: normal;
+  line-height: 1.25;
+  letter-spacing: .2px;
+}
+
+.navbar-nav {
+  align-items: center;
+  row-gap: 2px;
+}
+
+.navbar-nav .nav-link {
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.navbar-nav .nav-link.active {
+  color: var(--primary-color);
+}
+
+.navbar .dropdown-menu {
+  border: 0;
+  border-radius: var(--border-radius-small);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, .12);
+  padding: 8px 0;
+}
+
+.navbar .dropdown-item {
+  font-size: 14px;
+  padding: 8px 20px;
+}
+
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+  background: var(--section-bg-color);
+  color: var(--primary-color);
+}
+
+/* The template paints every navbar .custom-btn white, which makes the
+   outline variant invisible on the light navbar — restore the text, and
+   keep "SUPPORT US" on one line instead of breaking it in half. */
+.navbar-expand-lg .navbar-nav .nav-link.custom-btn.custom-border-btn {
+  color: var(--secondary-color);
+  font-size: 13px;
+  padding: 9px 20px;
+  white-space: nowrap;
+  margin-top: 0;
+  line-height: 1.2;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link.custom-btn.custom-border-btn:hover {
+  color: var(--white-color);
+}
+
+/* --- Step the menu down as the window narrows so nothing collides --- */
+
+/* Laptops: keep the organisation name on one line by tightening the menu. */
+@media screen and (min-width: 992px) and (max-width: 1399px) {
+  .navbar-brand small {
+    max-width: 400px;
+    font-size: 9.5px;
+  }
+
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 13px;
+  }
+
+  .navbar-expand-lg .navbar-nav .nav-link.custom-btn.custom-border-btn {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+}
+
+/* Small laptops and tablets in landscape: here the name has to wrap, so it
+   is given a width that breaks it evenly over two lines. */
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .navbar-brand .logo {
+    width: 44px;
+  }
+
+  .navbar-brand span {
+    font-size: 18px;
+  }
+
+  .navbar-brand small {
+    max-width: 270px;
+    font-size: 9px;
+  }
+
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 12.5px;
+  }
+}
+
+/* ---------- Sector shortcut tiles ---------- */
+.featured-block {
+  min-height: 190px;
+}
+
+.featured-block .featured-block-text {
+  font-size: 17px;
+  margin-bottom: 0;
+}
+
+/* ---------- Hero ----------
+   The template hides the right half of every photo behind a white diagonal
+   panel. Here the picture runs full-bleed and the sector text sits over a
+   gradient at the foot of the slide, so nothing in the photo is cut away. */
+#hero-slide .carousel-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-image {
+  display: block;
+  width: 100%;
+  height: 680px;
+  min-height: 680px;
+  object-fit: cover;
+}
+
+/* Readability scrim — heaviest at the bottom, clear across the picture. */
+#hero-slide .carousel-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    /* darkens the left, where the text sits, leaving the right clear */
+    linear-gradient(90deg,
+      rgba(20, 30, 38, .62) 0%,
+      rgba(20, 30, 38, .28) 40%,
+      rgba(20, 30, 38, 0) 72%),
+    linear-gradient(180deg,
+      rgba(20, 30, 38, .34) 0%,
+      rgba(20, 30, 38, .04) 26%,
+      rgba(20, 30, 38, .52) 64%,
+      rgba(20, 30, 38, .90) 100%);
+}
+
+#hero-slide .carousel-caption {
+  /* undo the template's diagonal white panel */
+  background: none;
+  clip-path: none;
+  color: var(--white-color);
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  text-align: left;
+  padding: 0 0 76px;
+  z-index: 3;
+}
+
+.hero-caption-inner {
+  max-width: 660px;
+}
+
+#hero-slide .carousel-caption small {
+  display: block;
+  color: var(--primary-color);
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .45);
+}
+
+#hero-slide .carousel-caption h1 {
+  color: var(--white-color);
+  font-size: 46px;
+  line-height: 1.15;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 16px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .45);
+}
+
+#hero-slide .carousel-caption p {
+  color: rgba(255, 255, 255, .92);
+  font-size: 16.5px;
+  line-height: 1.7;
+  margin-bottom: 26px;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .5);
+}
+
+#hero-slide .carousel-caption .hero-links {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#hero-slide .carousel-caption .btn {
+  font-size: 14px;
+  padding: 11px 26px;
+}
+
+/* On a photograph the slate default reads as muted — lead with the brand teal. */
+#hero-slide .carousel-caption .custom-btn:not(.hero-btn-ghost) {
+  background: var(--primary-color);
+  color: var(--white-color);
+}
+
+#hero-slide .carousel-caption .custom-btn:not(.hero-btn-ghost):hover {
+  background: var(--white-color);
+  color: var(--secondary-color);
+}
+
+/* Outline button, legible on a photograph. */
+.hero-btn-ghost {
+  background: rgba(255, 255, 255, .12);
+  border: 2px solid rgba(255, 255, 255, .75);
+  color: var(--white-color);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+.hero-btn-ghost:hover {
+  background: var(--white-color);
+  border-color: var(--white-color);
+  color: var(--secondary-color);
+}
+
+/* Slide dots */
+.hero-indicators {
+  z-index: 4;
+  margin-bottom: 30px;
+  gap: 4px;
+}
+
+.hero-indicators [data-bs-target] {
+  width: 34px;
+  height: 4px;
+  border-radius: 4px;
+  border: 0;
+  background: rgba(255, 255, 255, .45);
+  opacity: 1;
+  transition: all .3s ease;
+}
+
+.hero-indicators .active {
+  background: var(--primary-color);
+  width: 52px;
+}
+
+/* Keep the arrows above the scrim and visible on a dark photo. */
+#hero-slide .carousel-control-prev,
+#hero-slide .carousel-control-next {
+  z-index: 4;
+  width: 8%;
+}
+
+#hero-slide .carousel-control-next-icon,
+#hero-slide .carousel-control-prev-icon {
+  background-color: rgba(255, 255, 255, .18);
+  border: 2px solid rgba(255, 255, 255, .6);
+  width: 56px;
+  height: 56px;
+  background-size: 42% 42%;
+  opacity: 1;
+}
+
+#hero-slide .carousel-control-next-icon:hover,
+#hero-slide .carousel-control-prev-icon:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* ---------- Inner page banner ---------- */
+.page-hero {
+  position: relative;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  background: var(--secondary-color) center/cover no-repeat;
+}
+
+.page-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(68, 82, 93, .88) 0%, rgba(68, 82, 93, .55) 100%);
+}
+
+.page-hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+.page-hero h1 {
+  color: var(--white-color);
+  font-size: 42px;
+  margin-bottom: 8px;
+}
+
+.page-hero p {
+  color: rgba(255, 255, 255, .85);
+  font-size: 17px;
+  max-width: 720px;
+  margin-bottom: 0;
+}
+
+.page-hero .breadcrumb {
+  margin-bottom: 12px;
+}
+
+.page-hero .breadcrumb,
+.page-hero .breadcrumb a {
+  color: rgba(255, 255, 255, .75);
+  font-size: 13px;
+  text-decoration: none;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.page-hero .breadcrumb a:hover {
+  color: var(--primary-color);
+}
+
+.page-hero .breadcrumb-item + .breadcrumb-item::before {
+  color: rgba(255, 255, 255, .5);
+}
+
+/* ---------- Section headings ----------
+   One scale across the site: the 46px template default was set for a page
+   with far less text than these carry. */
+.section-padding h2,
+.section-bg h2 {
+  font-size: 30px;
+  letter-spacing: -0.4px;
+  line-height: 1.28;
+}
+
+.page-hero + section h2 {
+  font-size: 30px;
+}
+
+.section-padding h3 {
+  font-size: 24px;
+  letter-spacing: -0.3px;
+}
+
+.section-padding h4 {
+  font-size: 20px;
+}
+
+.section-eyebrow {
+  color: var(--primary-color);
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.section-title-underline::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 3px;
+  margin-top: 14px;
+}
+
+.text-center .section-title-underline::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------- Prose blocks rendered from the database ---------- */
+.prose {
+  color: var(--p-color);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.prose h3,
+.prose h4,
+.prose h5 {
+  color: var(--dark-color);
+  margin-top: 30px;
+  margin-bottom: 14px;
+}
+
+.prose h4 {
+  font-size: 22px;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.prose li {
+  margin-bottom: 10px;
+}
+
+.prose strong {
+  color: var(--secondary-color);
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--primary-color);
+  background: var(--section-bg-color);
+  padding: 18px 24px;
+  border-radius: var(--border-radius-small);
+  margin: 24px 0;
+}
+
+/* ---------- Sector / program cards ---------- */
+.sector-card {
+  background: var(--white-color);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all .4s ease;
+}
+
+.sector-card:hover {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, .12);
+  transform: translateY(-4px);
+}
+
+.sector-card-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.sector-card-body {
+  padding: 26px 28px 28px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.sector-card-body h5 {
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+
+.sector-card-body p {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.sector-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: var(--white-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.sector-card .read-more {
+  color: var(--primary-color);
+  font-weight: var(--font-weight-semibold);
+  font-size: 14px;
+  text-decoration: none;
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sector-card .read-more:hover {
+  color: var(--secondary-color);
+}
+
+/* ---------- Featured projects band ---------- */
+.featured-section {
+  padding-top: 44px;
+  padding-bottom: 40px;
+}
+
+.featured-section h2 {
+  font-size: 28px;
+  letter-spacing: -0.4px;
+  line-height: 1.25;
+}
+
+.featured-section .section-title-underline::after {
+  margin-top: 10px;
+}
+
+/* ---------- Homepage welcome strip ----------
+   A short lead-in between the hero and the story block: compact padding and
+   a heading sized so it does not compete with the hero above it. */
+.welcome-section {
+  padding-top: 46px;
+  padding-bottom: 34px;
+}
+
+.welcome-section .section-eyebrow {
+  margin-bottom: 6px;
+}
+
+.welcome-section h2 {
+  font-size: 28px;
+  letter-spacing: -0.4px;
+  line-height: 1.28;
+  margin-bottom: 12px !important;
+}
+
+.welcome-section p {
+  font-size: 15.5px;
+  line-height: 1.7;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------- Homepage "who we are" ----------
+   The picture fills its column so it always ends level with the text beside
+   it, whatever length the paragraphs run to. */
+.overview-section {
+  padding-top: 44px;
+  padding-bottom: 48px;
+}
+
+.overview-image {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  object-fit: cover;
+  object-position: center 52%;
+  border-radius: var(--border-radius-medium);
+}
+
+/* The template gives every text box a 24px bottom margin, which would leave
+   the card 24px shorter than the picture beside it. */
+#section_2 .custom-text-box {
+  margin-bottom: 0;
+  padding: 30px 32px 32px;
+}
+
+#section_2 .custom-text-box .section-eyebrow {
+  margin-bottom: 6px;
+}
+
+#section_2 .custom-text-box h2 {
+  font-size: 27px;
+  letter-spacing: -0.4px;
+  line-height: 1.28;
+  margin-bottom: 18px !important;
+}
+
+#section_2 .section-title-underline::after {
+  margin-top: 10px;
+}
+
+#section_2 .prose p {
+  font-size: 15px;
+  line-height: 1.68;
+  margin-bottom: 14px;
+}
+
+@media screen and (max-width: 991px) {
+  .welcome-section {
+    padding-top: 36px;
+    padding-bottom: 26px;
+  }
+
+  .welcome-section h2 {
+    font-size: 25px;
+  }
+
+  .overview-image {
+    min-height: 230px;
+    max-height: 290px;
+  }
+
+  #section_2 .custom-text-box {
+    padding: 24px 24px 26px;
+  }
+
+  #section_2 .custom-text-box h2 {
+    font-size: 24px;
+  }
+}
+
+/* ---------- Vision & Mission ----------
+   Laid out like the banner in the CMSR-TZ office: the word on the left, a
+   rounded icon plate on the right, and the statement underneath. */
+.vm-card {
+  background: var(--white-color);
+  border-radius: var(--border-radius-medium);
+  padding: 34px 36px 36px;
+  display: flex;
+  flex-direction: column;
+  transition: all .4s ease;
+}
+
+.vm-card:hover {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, .1);
+}
+
+.vm-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 20px;
+  margin-bottom: 22px;
+  border-bottom: 2px solid var(--section-bg-color);
+}
+
+.vm-card-head h3 {
+  font-size: 34px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--secondary-color);
+  margin: 0;
+}
+
+.vm-eyebrow {
+  color: var(--primary-color);
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: .6px;
+  margin: 4px 0 0;
+}
+
+/* The banner frames each icon in a rounded plate with a warm border; the
+   artwork inside keeps its own colours. */
+.vm-icon {
+  width: 78px;
+  height: 78px;
+  flex: 0 0 auto;
+  border-radius: 18px;
+  background: var(--white-color);
+  border: 3px solid #c08a4e;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  padding: 8px;
+}
+
+.vm-icon .icon-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Icon fields elsewhere may also hold artwork instead of a glyph. */
+.icon-image {
+  display: block;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.value-tile .tile-icon {
+  margin-bottom: 16px;
+}
+
+.vm-statement {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--p-color);
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 767px) {
+  .vm-card {
+    padding: 26px 24px 28px;
+  }
+
+  .vm-card-head h3 {
+    font-size: 26px;
+  }
+
+  .vm-icon {
+    width: 58px;
+    height: 58px;
+    font-size: 26px;
+    border-radius: 14px;
+  }
+
+  .vm-statement {
+    font-size: 16px;
+  }
+}
+
+/* ---------- Impact counters ---------- */
+.impact-strip {
+  background: var(--secondary-color);
+}
+
+.impact-item {
+  text-align: center;
+  color: var(--white-color);
+  padding: 12px;
+}
+
+.impact-item i {
+  font-size: 30px;
+  color: var(--primary-color);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.impact-item .impact-value {
+  font-size: 38px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.impact-item .impact-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, .75);
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+/* ---------- Project cards ---------- */
+.project-card {
+  background: var(--white-color);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all .4s ease;
+}
+
+.project-card:hover {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, .12);
+}
+
+.project-card-image-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform .6s ease;
+}
+
+.project-card:hover .project-card-image {
+  transform: scale(1.05);
+}
+
+.project-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: var(--primary-color);
+  color: var(--white-color);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--border-radius-large);
+}
+
+.project-badge.is-completed {
+  background: var(--secondary-color);
+}
+
+.project-card-body {
+  padding: 18px 20px 20px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Titles and summaries are clamped so every card is the same height and the
+   detail page carries the full text. */
+.project-card-body h5 {
+  font-size: 17px;
+  line-height: 1.35;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.project-card-body h5 a {
+  color: var(--dark-color);
+  text-decoration: none;
+}
+
+.project-card-body h5 a:hover {
+  color: var(--primary-color);
+}
+
+.project-meta {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  font-size: 12.5px;
+  color: var(--p-color);
+}
+
+.project-meta li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  min-width: 0;
+}
+
+/* One line each — the full location and donor are on the project page. */
+.project-meta li span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.project-meta i {
+  color: var(--primary-color);
+  flex: 0 0 auto;
+}
+
+.project-card-summary {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--p-color);
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* "Read more" opens the full write-up for that project. */
+.card-read-more {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  margin-top: auto;
+  align-self: flex-start;
+  width: fit-content;
+  color: var(--primary-color);
+  font-size: 13.5px;
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  transition: gap .25s ease, color .25s ease;
+}
+
+.card-read-more:hover {
+  color: var(--secondary-color);
+  gap: 11px;
+}
+
+.beneficiary-pill {
+  display: inline-block;
+  background: var(--section-bg-color);
+  color: var(--secondary-color);
+  border-radius: var(--border-radius-large);
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  padding: 5px 14px;
+  margin: 0 6px 6px 0;
+}
+
+/* ---------- Filter pills ---------- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.filter-pill {
+  border: 1px solid var(--border-color);
+  background: var(--white-color);
+  color: var(--secondary-color);
+  border-radius: var(--border-radius-large);
+  font-size: 14px;
+  padding: 8px 20px;
+  text-decoration: none;
+  transition: all .3s ease;
+}
+
+.filter-pill:hover,
+.filter-pill.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+/* ---------- News ---------- */
+.news-card {
+  background: var(--white-color);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all .4s ease;
+}
+
+.news-card:hover {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, .12);
+}
+
+.news-card-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.news-card-body {
+  padding: 24px 26px 26px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.news-card-body h5 {
+  font-size: 19px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.news-card-body h5 a {
+  color: var(--dark-color);
+  text-decoration: none;
+}
+
+.news-card-body h5 a:hover {
+  color: var(--primary-color);
+}
+
+.news-date {
+  color: var(--primary-color);
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.news-card p {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.sidebar-block {
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-medium);
+  padding: 24px 26px;
+  margin-bottom: 24px;
+}
+
+.sidebar-block > h5 {
+  font-size: 17px;
+  color: var(--secondary-color);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Headings inside editable content must not outrank the block's own title. */
+.sidebar-block .prose h3,
+.sidebar-block .prose h4,
+.sidebar-block .prose h5 {
+  font-size: 15.5px;
+  color: var(--secondary-color);
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.sidebar-block .prose > :first-child {
+  margin-top: 0;
+}
+
+.sidebar-block .prose li {
+  margin-bottom: 8px;
+}
+
+.sidebar-news-item {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.sidebar-news-item img {
+  width: 78px;
+  height: 68px;
+  object-fit: cover;
+  border-radius: var(--border-radius-small);
+  flex: 0 0 auto;
+}
+
+.sidebar-news-item a {
+  color: var(--dark-color);
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.sidebar-news-item a:hover {
+  color: var(--primary-color);
+}
+
+/* ---------- People (board & staff) ---------- */
+.person-card {
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-medium);
+  padding: 30px 26px 28px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all .35s ease;
+}
+
+.person-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 .75rem 2rem rgba(24, 34, 42, .1);
+  transform: translateY(-3px);
+}
+
+.person-photo,
+.person-initials {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+/* A tinted disc with a teal ring reads more considered than a solid blob. */
+.person-initials {
+  background: var(--section-bg-color);
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  font-size: 30px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 1px;
+}
+
+.person-photo {
+  border: 3px solid var(--section-bg-color);
+}
+
+.person-card:hover .person-initials {
+  background: var(--primary-color);
+  color: var(--white-color);
+}
+
+.person-card h5 {
+  font-size: 17.5px;
+  color: var(--secondary-color);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+/* Role reads as a label, not as a second name. */
+.person-role {
+  color: var(--primary-color);
+  font-size: 11.5px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 0;
+  padding-bottom: 14px;
+  position: relative;
+}
+
+.person-role::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--border-color);
+}
+
+.person-card p.person-bio {
+  font-size: 14px;
+  line-height: 1.65;
+  margin-bottom: 0;
+  color: var(--p-color);
+}
+
+/* ---------- Partners ----------
+   The plain plate, used on the Partners page inside each partner tile. */
+.partner-logo-card {
+  background: var(--white-color);
+  border-radius: var(--border-radius-small);
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  transition: all .3s ease;
+}
+
+.partner-logo-card:hover {
+  box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .1);
+}
+
+.partner-logo-card img {
+  max-height: 82px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* The homepage grid: logos vary wildly in shape, so each sits in a
+   fixed-height frame with its name underneath and every tile reads the
+   same size, however wide or tall the artwork is. */
+.partner-grid .partner-logo-card {
+  border: 1px solid var(--border-color);
+  height: 100%;
+  min-height: 148px;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 16px 12px 12px;
+}
+
+.partner-grid .partner-logo-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .08);
+  transform: translateY(-3px);
+}
+
+.partner-logo-frame {
+  height: 76px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.partner-grid .partner-logo-card img {
+  max-height: 72px;
+}
+
+.partner-logo-name {
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.35;
+  color: var(--secondary-color);
+  text-align: center;
+  letter-spacing: .2px;
+}
+
+@media screen and (max-width: 575px) {
+  .partner-grid .partner-logo-card {
+    min-height: 128px;
+    padding: 12px 8px 10px;
+  }
+
+  .partner-logo-frame {
+    height: 60px;
+  }
+
+  .partner-grid .partner-logo-card img {
+    max-height: 56px;
+  }
+
+  .partner-logo-name {
+    font-size: 11px;
+    margin-top: 9px;
+  }
+}
+
+/* Partner tile: a fixed logo band above the text, so every card in a row is
+   the same shape however tall or wide the logo artwork happens to be. */
+.partner-tile {
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: all .35s ease;
+}
+
+.partner-tile:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 .75rem 2rem rgba(24, 34, 42, .09);
+  transform: translateY(-3px);
+}
+
+.partner-tile-logo {
+  height: 116px;
+  flex: 0 0 auto;
+  background: var(--section-bg-color);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 24px;
+}
+
+.partner-tile-logo img {
+  max-height: 74px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.partner-tile-placeholder {
+  font-size: 26px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 1px;
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+.partner-tile-body {
+  padding: 22px 24px 24px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.partner-tile-body h5 {
+  font-size: 18px;
+  color: var(--secondary-color);
+  margin-bottom: 4px;
+}
+
+/* The expanded name is supporting detail, not a second heading. */
+.partner-tile-fullname {
+  font-size: 12.5px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: .2px;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.partner-tile-text {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--p-color);
+  margin-bottom: 14px;
+}
+
+.partner-tile .card-read-more {
+  font-size: 13px;
+}
+
+/* Networks */
+.network-card {
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--primary-color);
+  border-radius: var(--border-radius-small);
+  padding: 24px 26px;
+  height: 100%;
+  transition: all .35s ease;
+}
+
+.network-card:hover {
+  box-shadow: 0 .75rem 2rem rgba(24, 34, 42, .08);
+  transform: translateY(-3px);
+}
+
+.network-card h5 {
+  font-size: 17.5px;
+  color: var(--secondary-color);
+  margin-bottom: 10px;
+}
+
+.network-card p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+/* ---------- Value / feature tiles ----------
+   A white tile on a white section is invisible, so every tile carries a
+   hairline border and reads as a card on any background. */
+.value-tile {
+  background: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-medium);
+  padding: 28px 26px;
+  height: 100%;
+  transition: all .35s ease;
+}
+
+.value-tile:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 .75rem 2rem rgba(24, 34, 42, .09);
+  transform: translateY(-3px);
+}
+
+/* The icon sits on a tinted plate rather than floating on its own. */
+.value-tile > i {
+  color: var(--primary-color);
+  font-size: 22px;
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: var(--section-bg-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.value-tile:hover > i {
+  background: var(--primary-color);
+  color: var(--white-color);
+}
+
+.value-tile h5 {
+  font-size: 18px;
+  color: var(--secondary-color);
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+
+.value-tile p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+/* ---------- Gallery ---------- */
+.gallery-item {
+  display: block;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: transform .6s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.07);
+}
+
+.gallery-item::after {
+  content: "\F52A";
+  font-family: "bootstrap-icons";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(91, 193, 172, .8);
+  color: var(--white-color);
+  font-size: 28px;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
+}
+
+/* ---------- Contact ---------- */
+.contact-tile {
+  background: var(--white-color);
+  border-radius: var(--border-radius-medium);
+  padding: 28px;
+  height: 100%;
+}
+
+.contact-tile i {
+  color: var(--primary-color);
+  font-size: 26px;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.contact-tile h5 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.contact-tile p,
+.contact-tile a {
+  font-size: 15px;
+  color: var(--p-color);
+  text-decoration: none;
+  margin-bottom: 0;
+}
+
+.contact-tile a:hover {
+  color: var(--primary-color);
+}
+
+.map-frame {
+  border: 0;
+  width: 100%;
+  height: 400px;
+  border-radius: var(--border-radius-medium);
+}
+
+/* ---------- CTA band ----------
+   Used inside a container on the inner pages, where an inset card suits the
+   narrower content. */
+.cta-band {
+  background: var(--primary-color);
+  color: var(--white-color);
+  border-radius: var(--border-radius-medium);
+  padding: 44px 48px;
+}
+
+.cta-band h3 {
+  color: var(--white-color);
+  margin-bottom: 6px;
+}
+
+.cta-band p {
+  color: rgba(255, 255, 255, .9);
+  margin-bottom: 0;
+}
+
+.cta-band .custom-btn {
+  background: var(--white-color);
+  color: var(--secondary-color);
+}
+
+.cta-band .custom-btn:hover {
+  background: var(--secondary-color);
+  color: var(--white-color);
+}
+
+/* ---------- Full-width bands ----------
+   Same treatment as the footer: the colour runs edge to edge and only the
+   content is held to the container, so the homepage reads as stacked bands
+   rather than floating cards. */
+.cta-band-full {
+  background: var(--primary-color);
+  color: var(--white-color);
+  padding: 46px 0;
+}
+
+.cta-band-full h3 {
+  color: var(--white-color);
+  font-size: 30px;
+  letter-spacing: -0.4px;
+  margin-bottom: 8px;
+}
+
+.cta-band-full p {
+  color: rgba(255, 255, 255, .92);
+  font-size: 15.5px;
+  margin-bottom: 0;
+  max-width: 640px;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cta-band-full .custom-btn {
+  background: var(--white-color);
+  color: var(--secondary-color);
+  white-space: nowrap;
+}
+
+.cta-band-full .custom-btn:hover {
+  background: var(--secondary-color);
+  color: var(--white-color);
+}
+
+.cta-btn-ghost {
+  background: transparent !important;
+  border: 2px solid rgba(255, 255, 255, .8);
+  color: var(--white-color) !important;
+}
+
+.cta-btn-ghost:hover {
+  background: var(--white-color) !important;
+  border-color: var(--white-color);
+  color: var(--secondary-color) !important;
+}
+
+/* In brief — the same edge-to-edge treatment, on the pale section colour. */
+.brief-band {
+  background: var(--section-bg-color);
+  padding: 40px 0 42px;
+}
+
+.brief-band-title {
+  font-size: 19px;
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+}
+
+.brief-band-title i {
+  color: var(--primary-color);
+}
+
+.brief-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 18px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(90, 111, 128, .14);
+}
+
+.brief-item:last-child {
+  padding-bottom: 0;
+}
+
+.brief-date {
+  color: var(--primary-color);
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  min-width: 96px;
+  flex: 0 0 auto;
+}
+
+.brief-text {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--p-color);
+  flex: 1 1 320px;
+}
+
+.brief-text strong {
+  color: var(--secondary-color);
+}
+
+@media screen and (max-width: 767px) {
+  .cta-band-full {
+    padding: 34px 0;
+    text-align: center;
+  }
+
+  .cta-band-full h3 {
+    font-size: 24px;
+  }
+
+  .cta-band-full p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-actions {
+    justify-content: center;
+  }
+
+  .brief-band {
+    padding: 30px 0 32px;
+  }
+
+  .brief-date {
+    min-width: 0;
+  }
+}
+
+/* ---------- Footer ---------- */
+.footer-contact-text {
+  color: rgba(255, 255, 255, .75);
+  font-size: 14px;
+}
+
+.staff-login-link {
+  color: rgba(255, 255, 255, .5);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.staff-login-link:hover {
+  color: var(--primary-color);
+}
+
+/* ---------- Tables ---------- */
+.table-projects {
+  background: var(--white-color);
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.table-projects thead th {
+  background: var(--secondary-color);
+  color: var(--white-color);
+  font-weight: var(--font-weight-semibold);
+  border: 0;
+  white-space: nowrap;
+}
+
+.table-projects td {
+  vertical-align: top;
+  color: var(--p-color);
+}
+
+/* ---------- Pagination ---------- */
+.pagination .page-link {
+  color: var(--secondary-color);
+  border-color: var(--border-color);
+}
+
+.pagination .page-item.active .page-link {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+/* ---------- Responsive ---------- */
+
+/* The template's hero caption is a fixed 680px block; on a phone that pushes
+   the whole page sideways, so it is re-flowed here rather than clipped. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 991px) {
+  /* Below lg the dropdowns sit in the flow of the collapsed menu, and the
+     template sizes them to `max-content` — which drags the whole page wider
+     than the screen. Let them wrap instead. */
+  .navbar .dropdown-menu {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin-top: 0;
+    box-shadow: none;
+    background: var(--section-bg-color);
+  }
+
+  .navbar .dropdown-item {
+    white-space: normal;
+  }
+
+  .navbar-brand .logo {
+    width: 46px;
+  }
+
+  .navbar-brand small {
+    max-width: 265px;
+    font-size: 9.5px;
+  }
+
+  .navbar-brand span {
+    font-size: 17px;
+  }
+
+  .page-hero {
+    min-height: 260px;
+  }
+
+  .page-hero h1 {
+    font-size: 30px;
+  }
+
+  .cta-band {
+    padding: 30px;
+    text-align: center;
+  }
+
+  #hero-slide .carousel-caption {
+    padding-bottom: 62px;
+  }
+
+  #hero-slide .carousel-caption h1 {
+    font-size: 32px;
+  }
+
+  #hero-slide .carousel-caption p {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  #hero-slide .carousel-control-next-icon,
+  #hero-slide .carousel-control-prev-icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .carousel-image,
+  #hero-slide .carousel-item,
+  .hero-section-full-height {
+    height: 520px;
+    min-height: 520px;
+  }
+
+  /* A little more breathing room from the screen edge than the grid gives. */
+  #hero-slide .carousel-caption {
+    padding: 0 10px 56px;
+  }
+
+  #hero-slide .carousel-caption h1 {
+    font-size: 26px;
+  }
+
+  #hero-slide .carousel-caption small {
+    font-size: 11.5px;
+    letter-spacing: 1.6px;
+  }
+
+  #hero-slide .carousel-caption p {
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  #hero-slide .carousel-caption .btn {
+    font-size: 13px;
+    padding: 9px 18px;
+  }
+
+  #hero-slide .carousel-control-prev,
+  #hero-slide .carousel-control-next {
+    align-items: flex-start;
+    padding-top: 120px;
+  }
+
+  .sector-card-image,
+  .project-card-image,
+  .news-card-image {
+    height: 190px;
+  }
+}

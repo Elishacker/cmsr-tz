@@ -1,0 +1,5 @@
+# Generated thumbnails only; no execution.
+php_flag engine off
+<FilesMatch "\.(php|phtml|pl|py|cgi|sh)$">
+    Require all denied
+</FilesMatch>

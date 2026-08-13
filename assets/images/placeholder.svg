@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="CMSR-TZ">
+  <rect width="800" height="600" fill="#f0f8ff"/>
+  <g fill="none" stroke="#5bc1ac" stroke-width="8">
+    <circle cx="400" cy="272" r="86"/>
+  </g>
+  <path d="M356 300c0-24 20-44 44-44s44 20 44 44-44 62-44 62-44-38-44-62z" fill="#5bc1ac"/>
+  <text x="400" y="430" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="34" font-weight="bold" fill="#5a6f80">CMSR-TZ</text>
+  <text x="400" y="470" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="18" fill="#8a99a5">Image coming soon</text>
+</svg>

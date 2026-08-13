@@ -1,0 +1,621 @@
+/* =====================================================================
+   CMSR-TZ staff portal — a light admin skin built on the site palette.
+   ===================================================================== */
+
+:root {
+  --a-primary: #5bc1ac;
+  --a-dark: #44525d;
+  --a-slate: #5a6f80;
+  --a-bg: #f4f7fa;
+  --a-border: #e3e8ee;
+  --a-muted: #7a8894;
+}
+
+body.admin-body {
+  background: var(--a-bg);
+  font-family: 'Metropolis', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 15px;
+  color: #2f3a42;
+  margin: 0;
+}
+
+/* ---------- Layout ----------
+   The sidebar is fixed: it stays put while the page scrolls, and the whole
+   menu is sized to fit one screen so nothing is hidden below the fold.
+   The brand stays pinned at the top of it. */
+.admin-shell {
+  min-height: 100vh;
+}
+
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 268px;
+  background: var(--a-dark);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  z-index: 1030;
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  color: #fff;
+  text-decoration: none;
+  flex: 0 0 auto;
+}
+
+.admin-brand img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.admin-brand strong {
+  display: block;
+  font-size: 17px;
+  line-height: 1.15;
+}
+
+.admin-brand span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, .6);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+
+/* The sidebar itself never moves; when the menu is taller than the window
+   it scrolls on its own, so the entries stay comfortably sized. */
+.admin-nav {
+  padding: 8px 0 20px;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, .35) transparent;
+}
+
+.admin-nav::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, .3);
+  border-radius: 4px;
+}
+
+.admin-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, .5);
+}
+
+.admin-nav-title {
+  font-size: 11px;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .42);
+  padding: 16px 20px 6px;
+}
+
+.admin-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 20px;
+  color: rgba(255, 255, 255, .8);
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 1.35;
+  border-left: 3px solid transparent;
+  transition: all .2s ease;
+}
+
+.admin-nav a:hover {
+  background: rgba(255, 255, 255, .06);
+  color: #fff;
+}
+
+.admin-nav a.active {
+  background: rgba(91, 193, 172, .16);
+  border-left-color: var(--a-primary);
+  color: #fff;
+}
+
+.admin-nav a i {
+  font-size: 17px;
+  width: 20px;
+  text-align: center;
+}
+
+.admin-nav .badge {
+  margin-left: auto;
+  background: var(--a-primary);
+  font-size: 11px;
+}
+
+/* The fixed sidebar is out of the flow, so the page is inset instead. */
+.admin-main {
+  margin-left: 268px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.admin-topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--a-border);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.admin-topbar h1 {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 700;
+  color: var(--a-dark);
+}
+
+.admin-content {
+  padding: 26px 28px 60px;
+  flex: 1 1 auto;
+}
+
+/* ---------- Top-bar user menu ---------- */
+.user-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 30px;
+  padding: 4px 12px 4px 4px;
+  cursor: pointer;
+}
+
+.user-menu-btn:hover,
+.user-menu-btn[aria-expanded="true"] {
+  border-color: var(--a-border);
+  background: #fff;
+}
+
+.user-menu-btn::after {
+  color: var(--a-muted);
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--a-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.user-name {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--a-dark);
+  line-height: 1.1;
+}
+
+.user-role {
+  display: block;
+  font-size: 11.5px;
+  color: var(--a-muted);
+}
+
+.admin-topbar .dropdown-menu {
+  font-size: 14px;
+  border: 1px solid var(--a-border);
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.admin-topbar .dropdown-item {
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+/* ---------- Cards ---------- */
+.admin-card {
+  background: #fff;
+  border: 1px solid var(--a-border);
+  border-radius: 12px;
+  margin-bottom: 22px;
+}
+
+.admin-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--a-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-card-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--a-dark);
+}
+
+.admin-card-body {
+  padding: 20px;
+}
+
+/* ---------- Stat tiles ---------- */
+.stat-tile {
+  background: #fff;
+  border: 1px solid var(--a-border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  transition: all .2s ease;
+}
+
+.stat-tile:hover {
+  border-color: var(--a-primary);
+  box-shadow: 0 .4rem 1.2rem rgba(0, 0, 0, .06);
+  color: inherit;
+}
+
+.stat-tile .stat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: rgba(91, 193, 172, .14);
+  color: var(--a-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex: 0 0 auto;
+}
+
+.stat-tile .stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--a-dark);
+}
+
+.stat-tile .stat-label {
+  font-size: 13px;
+  color: var(--a-muted);
+  margin: 4px 0 0;
+}
+
+/* ---------- Tables ---------- */
+.admin-table {
+  width: 100%;
+  font-size: 14px;
+  margin: 0;
+}
+
+.admin-table th {
+  background: #f7f9fb;
+  color: var(--a-slate);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--a-border);
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--a-border);
+  vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+  background: #fbfcfd;
+}
+
+.admin-table .row-thumb {
+  width: 56px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--a-bg);
+}
+
+.admin-table .row-title {
+  font-weight: 600;
+  color: var(--a-dark);
+}
+
+.admin-table .row-sub {
+  font-size: 12.5px;
+  color: var(--a-muted);
+}
+
+/* ---------- Badges and buttons ---------- */
+.chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  background: #eef2f6;
+  color: var(--a-slate);
+}
+
+.chip-on { background: rgba(91, 193, 172, .16); color: #2e8d78; }
+.chip-off { background: #f1e7e7; color: #a4534f; }
+.chip-info { background: rgba(90, 111, 128, .12); color: var(--a-slate); }
+
+.btn-cmsr {
+  background: var(--a-primary);
+  border-color: var(--a-primary);
+  color: #fff;
+}
+
+.btn-cmsr:hover {
+  background: #4aa895;
+  border-color: #4aa895;
+  color: #fff;
+}
+
+.btn-outline-cmsr {
+  border-color: var(--a-border);
+  color: var(--a-slate);
+  background: #fff;
+}
+
+.btn-outline-cmsr:hover {
+  border-color: var(--a-primary);
+  color: var(--a-primary);
+  background: #fff;
+}
+
+/* ---------- Forms ---------- */
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--a-slate);
+  margin-bottom: 5px;
+}
+
+.form-control,
+.form-select {
+  font-size: 14.5px;
+  border-color: var(--a-border);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--a-primary);
+  box-shadow: 0 0 0 .18rem rgba(91, 193, 172, .18);
+}
+
+.form-hint {
+  font-size: 12.5px;
+  color: var(--a-muted);
+  margin-top: 4px;
+}
+
+.field-block {
+  margin-bottom: 18px;
+}
+
+/* ---------- Image picker ---------- */
+.image-field {
+  border: 1px dashed var(--a-border);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: #fbfcfd;
+}
+
+.image-field .preview {
+  width: 116px;
+  height: 86px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #eef2f6;
+  flex: 0 0 auto;
+}
+
+.image-field .controls {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#mediaPickerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+#mediaPickerGrid button {
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 0;
+  background: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#mediaPickerGrid button:hover {
+  border-color: var(--a-primary);
+}
+
+#mediaPickerGrid img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+}
+
+#mediaPickerGrid .name {
+  font-size: 11px;
+  color: var(--a-muted);
+  padding: 4px 6px;
+  text-align: left;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+/* ---------- Media library ---------- */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.media-item {
+  background: #fff;
+  border: 1px solid var(--a-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.media-item img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  display: block;
+}
+
+.media-item .media-meta {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--a-muted);
+  word-break: break-word;
+}
+
+/* ---------- Login ---------- */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #44525d 0%, #5a6f80 60%, #5bc1ac 160%);
+  padding: 30px 16px;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  padding: 38px 36px 32px;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, .25);
+}
+
+.login-card img.logo {
+  width: 66px;
+  display: block;
+  margin: 0 auto 16px;
+}
+
+.login-card h1 {
+  font-size: 21px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--a-dark);
+  margin-bottom: 4px;
+}
+
+.login-card p.sub {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--a-muted);
+  margin-bottom: 26px;
+}
+
+/* ---------- Responsive ---------- */
+
+/* Shorter screens: trim the breathing room a little, but never the text —
+   past this point the menu simply scrolls inside the fixed sidebar. */
+@media (min-width: 992px) and (max-height: 820px) {
+  .admin-brand {
+    padding: 12px 20px;
+  }
+
+  .admin-brand img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .admin-nav {
+    padding: 4px 0 16px;
+  }
+
+  .admin-nav-title {
+    padding: 12px 20px 5px;
+  }
+
+  .admin-nav a {
+    padding: 7px 20px;
+    font-size: 14.5px;
+  }
+}
+
+@media (max-width: 991px) {
+  /* The sidebar slides in over the page instead of holding a column. */
+  .admin-sidebar {
+    left: -278px;
+    transition: left .25s ease;
+    box-shadow: 0 0 3rem rgba(0, 0, 0, .3);
+    z-index: 1045;
+  }
+
+  .admin-sidebar.open {
+    left: 0;
+  }
+
+  .admin-main {
+    margin-left: 0;
+  }
+
+  .admin-content {
+    padding: 18px 16px 50px;
+  }
+
+  .admin-topbar {
+    padding: 12px 16px;
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+    z-index: 1040;
+  }
+}
